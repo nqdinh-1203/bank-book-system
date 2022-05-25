@@ -1,0 +1,39 @@
+{% load static %}
+
+<style>
+  .hello-msg{
+    font-size: 18px;
+    color: #fff;
+    margin-right: 20px;
+  }
+</style>
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <img style="max-width:100px; margin-top: -7px;" src="/static/images/logo1.png">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      {% if request.user.is_staff %}
+      <li style="max-width:100px; margin-top: 5px; margin-right: 5px;" class="nav-item active">
+        <a  class="nav-linsk" href="{% url 'home' %}">Dashboard</a>
+      </li>
+      <li style="max-width:100px; margin-top: -2px; margin-right: 5px;" class="nav-item">
+        <a class="nav-link" href="{% url 'products' %}">Products</a>
+      </li>
+      {% else %}
+      <li class="nav-item">
+        <a class="navlink" href="{% url 'account' %}">Settings</a>
+      </li>
+      <li class="nav-item">
+        <a class="navlink" href="{% url 'create_bankbook' %}">Mở sổ tiết kiệm</a>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+  <span class="hello-msg">Hello, {{request.user}}</span>
+  <span ><a class="hello-msg" href="{% url 'logout' %}">Logout</a></span>
+</nav>
+
