@@ -80,7 +80,7 @@ def home(request):
 def userPage(request):
     orders = request.user.customer.orders_set.all()
     bankbooks = 1
-    #bankbooks =  request.user.customer.bankbook_set.all()
+    bankbooks =  request.user.customer.bankbooks_set.all()
     
 
     total_orders = orders.count()

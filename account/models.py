@@ -79,13 +79,10 @@ class BankBooks(models.Model):
     type = models.CharField(max_length=200, null=True,choices=TYPE,verbose_name='Loại tiết kiệm')
     date_created = models.DateTimeField(auto_now_add=True, null=True)
 
-    # def __str__(self):
-    #     return self.name
-    # def initial_amount(self):
-    #     self.balance  += self.firstdeposit   
+    
     def save(self, *args, **kwargs):
         self.balance = self.firstdeposit
-
+        
         super(BankBooks, self).save(*args, **kwargs)
 
 class Orders(models.Model):
