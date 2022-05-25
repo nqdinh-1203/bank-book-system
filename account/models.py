@@ -63,7 +63,51 @@ class Products(models.Model):
 
 #         super(BankBook, self).save(*args, **kwargs)
 
-class BankBooks(models.Model):
+# class BankBooks(models.Model):
+#     TYPE = (
+#         ('3 tháng','3 tháng'),
+#         ('6 tháng','6 tháng'),
+#         ('Không kỳ hạn','Không kỳ hạn')
+#         )
+#     customer=models.ForeignKey(Customer,null=True,on_delete=models.SET_NULL)
+#     customer_name = models.CharField(max_length=200, null=True,verbose_name='Tên khách hàng')
+#     identityid = models.CharField(max_length=200, null=True,verbose_name='CMND/CCCD')
+#     customer_address = models.CharField(max_length=200, null=True,verbose_name='Địa chỉ')
+#     bookid = models.CharField(max_length=200, null=True,blank=True)
+#     firstdeposit = models.FloatField(null=True,verbose_name='Số tiền gửi')
+#     balance = models.FloatField(null=True,default=0)
+#     type = models.CharField(max_length=200, null=True,choices=TYPE,verbose_name='Loại tiết kiệm')
+#     date_created = models.DateTimeField(auto_now_add=True, null=True)
+
+    
+#     def save(self, *args, **kwargs):
+#         self.balance = self.firstdeposit
+        
+#         super(BankBooks, self).save(*args, **kwargs)
+
+# class BankBookk(models.Model):
+#     TYPE = (
+#         ('3 tháng','3 tháng'),
+#         ('6 tháng','6 tháng'),
+#         ('Không kỳ hạn','Không kỳ hạn')
+#         )
+#     customer=models.ForeignKey(Customer,null=True,on_delete=models.SET_NULL)
+#     customer_name = models.CharField(max_length=200, null=True,verbose_name='Tên khách hàng')
+#     identityid = models.CharField(max_length=200, null=True,verbose_name='CMND/CCCD')
+#     customer_address = models.CharField(max_length=200, null=True,verbose_name='Địa chỉ')
+#     bookid = models.CharField(max_length=200, null=True,blank=True)
+#     firstdeposit = models.FloatField(null=True,verbose_name='Số tiền gửi')
+#     balance = models.FloatField(null=True,default=0)
+#     type = models.CharField(max_length=200, null=True,choices=TYPE,verbose_name='Loại tiết kiệm')
+#     date_created = models.DateTimeField(auto_now_add=True, null=True)
+
+    
+#     def save(self, *args, **kwargs):
+#         self.balance = self.firstdeposit
+        
+#         super(BankBookk, self).save(*args, **kwargs)
+
+class BankBookkk(models.Model):
     TYPE = (
         ('3 tháng','3 tháng'),
         ('6 tháng','6 tháng'),
@@ -73,7 +117,7 @@ class BankBooks(models.Model):
     customer_name = models.CharField(max_length=200, null=True,verbose_name='Tên khách hàng')
     identityid = models.CharField(max_length=200, null=True,verbose_name='CMND/CCCD')
     customer_address = models.CharField(max_length=200, null=True,verbose_name='Địa chỉ')
-    bookid = models.CharField(max_length=200, null=True,blank=True)
+    bookid = models.AutoField(primary_key=True)
     firstdeposit = models.FloatField(null=True,verbose_name='Số tiền gửi')
     balance = models.FloatField(null=True,default=0)
     type = models.CharField(max_length=200, null=True,choices=TYPE,verbose_name='Loại tiết kiệm')
@@ -83,7 +127,7 @@ class BankBooks(models.Model):
     def save(self, *args, **kwargs):
         self.balance = self.firstdeposit
         
-        super(BankBooks, self).save(*args, **kwargs)
+        super(BankBookkk, self).save(*args, **kwargs)
 
 class Orders(models.Model):
     STATUS = (
