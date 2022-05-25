@@ -80,9 +80,8 @@ def home(request):
 def userPage(request):
     orders = request.user.customer.orders_set.all()
     bankbooks = 1
-    bankbooks =  request.user.customer.bankbooks_set.all()
+    bankbooks =  request.user.customer.bankbookkk_set.all()
     
-
     total_orders = orders.count()
     delivered = orders.filter(status='Delivered').count()
     pending = orders.filter(status='Pending').count()
@@ -113,10 +112,10 @@ def accountSettings(request):
 @allowed_users(allowed_roles=['customer'])
 def createBankBook(request):
     customer = request.user.customer
-    OrderFormSet = inlineformset_factory(Customer, BankBooks, fields=('type','customer_name','identityid',
+    OrderFormSet = inlineformset_factory(Customer, BankBookkk, fields=('type','customer_name','identityid',
                                                                      'customer_address','firstdeposit',
                                                                      ),extra=1,can_delete=False)
-    formset = OrderFormSet(queryset=BankBooks.objects.none(),instance=customer)
+    formset = OrderFormSet(queryset=BankBookkk.objects.none(),instance=customer)
     if request.method == 'POST':
         formset = OrderFormSet(request.POST,instance=customer)
         if formset.is_valid():
