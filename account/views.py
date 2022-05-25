@@ -14,7 +14,7 @@ from account.decorators import unauthenticated_user
 
 # Create your views here.
 from .models import *
-from .forms import BankbookForm, OrderForm, CreateUserForm,CustomerForm
+from .forms import  OrderForm, CreateUserForm,CustomerForm
 from .filters import OrderFilter,MonthlyFilter,DailyFilter
 from .decorators import unauthenticated_user,allowed_users,admin_only
 
@@ -79,7 +79,9 @@ def home(request):
 @allowed_users(allowed_roles=['customer'])
 def userPage(request):
     orders = request.user.customer.orders_set.all()
-    bankbooks =  request.user.customer.bankbook_set.all()
+    bankbooks = 1
+    #bankbooks =  request.user.customer.bankbook_set.all()
+    
 
     total_orders = orders.count()
     delivered = orders.filter(status='Delivered').count()
@@ -111,10 +113,10 @@ def accountSettings(request):
 @allowed_users(allowed_roles=['customer'])
 def createBankBook(request):
     customer = request.user.customer
-    OrderFormSet = inlineformset_factory(Customer, BankBook, fields=('type','customer_name','identityid',
+    OrderFormSet = inlineformset_factory(Customer, BankBooks, fields=('type','customer_name','identityid',
                                                                      'customer_address','firstdeposit',
                                                                      ),extra=1,can_delete=False)
-    formset = OrderFormSet(queryset=BankBook.objects.none(),instance=customer)
+    formset = OrderFormSet(queryset=BankBooks.objects.none(),instance=customer)
     if request.method == 'POST':
         formset = OrderFormSet(request.POST,instance=customer)
         if formset.is_valid():
@@ -202,11 +204,11 @@ def deleteOrder(request,pk):
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
 def createOrder(request,pk):
-    OrderFormSet = inlineformset_factory(Customer, BankBook, fields=('type','customer_name','identityid',
+    OrderFormSet = inlineformset_factory(Customer, BankBooks, fields=('type','customer_name','identityid',
                                                                     'customer_address','firstdeposit',
                                                                     ),extra=1)
     customer = Customer.objects.get(id=pk)
-    formset = OrderFormSet(queryset=BankBook.objects.none(),instance=customer)
+    formset = OrderFormSet(queryset=BankBooks.objects.none(),instance=customer)
     #form = OrderForm(initial={'customer':customer})
     if request.method == 'POST':
         #print('Printing POST: ',request.POST)
@@ -220,37 +222,37 @@ def createOrder(request,pk):
 
 
 
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
-def createMonthlyReport(request,pk_test):
-    customer = Customer.objects.get(id=pk_test)
+# @login_required(login_url='login')
+# @allowed_users(allowed_roles=['admin'])
+# def createMonthlyReport(request,pk_test):
+#     customer = Customer.objects.get(id=pk_test)
 
-    orders = customer.orders_set.all()
-    orders_count= orders.count()
-    bank_books = customer.bank_book_set.all()
-    bank_book_count= bank_books.count()
+#     orders = customer.orders_set.all()
+#     orders_count= orders.count()
+#     bank_books = customer.bank_book_set.all()
+#     bank_book_count= bank_books.count()
     
 
-    myFilter = MonthlyFilter(request.GET, queryset=bank_books)
-    bank_books = myFilter.qs
+#     myFilter = MonthlyFilter(request.GET, queryset=bank_books)
+#     bank_books = myFilter.qs
 
-    bank_books = bank_books.filter
+#     bank_books = bank_books.filter
 
-    context = {'customer':customer,'orders':orders,'orders_count':orders_count,
-    'myFilter':myFilter}
-    return render(request, 'accounts/customer.html',context)
+#     context = {'customer':customer,'orders':orders,'orders_count':orders_count,
+#     'myFilter':myFilter}
+#     return render(request, 'accounts/customer.html',context)
 
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
-def createDailyReport(request,pk):
-    OrderFormSet = inlineformset_factory(Customer, Orders, fields=('products','status'),extra=5)
-    customer = Customer.objects.get(id=pk)
-    formset = OrderFormSet(queryset=Orders.objects.none(),instance=customer)
-    if request.method == 'POST':
-        formset = OrderFormSet(request.POST,instance=customer)
-        if formset.is_valid():
-            formset.save()
-            return redirect('/')
-    context = {'formset': formset}
-    return render(request,'accounts/order_form.html',context)
+# @login_required(login_url='login')
+# @allowed_users(allowed_roles=['admin'])
+# def createDailyReport(request,pk):
+#     OrderFormSet = inlineformset_factory(Customer, Orders, fields=('products','status'),extra=5)
+#     customer = Customer.objects.get(id=pk)
+#     formset = OrderFormSet(queryset=Orders.objects.none(),instance=customer)
+#     if request.method == 'POST':
+#         formset = OrderFormSet(request.POST,instance=customer)
+#         if formset.is_valid():
+#             formset.save()
+#             return redirect('/')
+#     context = {'formset': formset}
+#     return render(request,'accounts/order_form.html',context)
     

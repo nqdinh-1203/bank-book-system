@@ -68,7 +68,7 @@ class MonthlyFilter(django_filters.FilterSet):
 
 
     class Meta:
-        model = BankBook
+        model = BankBooks
         fields=['type']
         #fields = '__all__'
         #exclude = ['customer','date_created','price','date_created','type']
@@ -80,7 +80,7 @@ class DailyFilter(django_filters.FilterSet):
                     widget=forms.widgets.DateInput(attrs={'type': 'date'}))
 
     class Meta:
-        model = BankBook
+        model = BankBooks
         fields='__all__'
         exclude = ['customer','name','price','date_created','type']
     
