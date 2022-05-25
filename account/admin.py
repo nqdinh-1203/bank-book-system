@@ -7,7 +7,7 @@ admin.site.register(Customer)
 admin.site.register(Tag)
 admin.site.register(Products)
 admin.site.register(Orders)
-admin.site.register(BankBook)
+admin.site.register(BankBooks)
 
 
 

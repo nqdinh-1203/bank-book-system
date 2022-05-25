@@ -32,17 +32,15 @@
 		<div class="card card-body">
 			<table class="table table-sm">
 				<tr>
-					<th>Mã sổ</th>
 					<th>Loại tiết kiệm</th>
 					<th>Tên</th>
 					<th>Ngày tạo</th>
 					<th>Địa chỉ</th>
 					<th>Số dư</th>
 				</tr>
-				
+
 				{% for bankbook in bankbooks%}
 					<tr>
-						<td>{{bankbookb.bookid}}</td>
 						<td>{{bankbook.type}}</td>
 						<td>{{bankbook.customer_name}}</td>
 						<td>{{bankbook.date_created}}</td>
@@ -51,8 +49,10 @@
 					</tr>
 				{% endfor %}
 
+
 			</table>
 		</div>
 	</div>
 </div>
+
 {% endblock content %}

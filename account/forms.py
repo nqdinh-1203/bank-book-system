@@ -10,11 +10,7 @@ class CustomerForm(ModelForm):
         model=Customer
         fields='__all__'
         exclude=['user']
-class BankbookForm(ModelForm):
-    class Meta:
-        model=BankBook
-        fields='__all__'
-        exclude=['customer','amount','date_created','bookid']
+
 
 class OrderForm(ModelForm):
     class Meta:

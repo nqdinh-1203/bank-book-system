@@ -37,7 +37,33 @@ class Products(models.Model):
 
     def __str__(self):
         return self.name
-class BankBook(models.Model):
+        
+# class BankBook(models.Model):
+#     TYPE = (
+#         ('3 tháng','3 tháng'),
+#         ('6 tháng','6 tháng'),
+#         ('Không kỳ hạn','Không kỳ hạn')
+#         )
+#     customer=models.ForeignKey(Customer,null=True,on_delete=models.SET_NULL)
+#     customer_name = models.CharField(max_length=200, null=True,verbose_name='Tên khách hàng')
+#     identityid = models.CharField(max_length=200, null=True,verbose_name='CMND/CCCD')
+#     customer_address = models.CharField(max_length=200, null=True,verbose_name='Địa chỉ')
+#     bookid = models.CharField(max_length=200, null=True,blank=True)
+#     firstdeposit = models.FloatField(null=True,verbose_name='Số tiền gửi')
+#     balance = models.FloatField(null=True,default=0)
+#     type = models.CharField(max_length=200, null=True,choices=TYPE,verbose_name='Loại tiết kiệm')
+#     date_created = models.DateTimeField(auto_now_add=True, null=True)
+
+#     # def __str__(self):
+#     #     return self.name
+#     # def initial_amount(self):
+#     #     self.balance  += self.firstdeposit   
+#     def save(self, *args, **kwargs):
+#         self.balance = self.firstdeposit
+
+#         super(BankBook, self).save(*args, **kwargs)
+
+class BankBooks(models.Model):
     TYPE = (
         ('3 tháng','3 tháng'),
         ('6 tháng','6 tháng'),
@@ -47,21 +73,17 @@ class BankBook(models.Model):
     customer_name = models.CharField(max_length=200, null=True,verbose_name='Tên khách hàng')
     identityid = models.CharField(max_length=200, null=True,verbose_name='CMND/CCCD')
     customer_address = models.CharField(max_length=200, null=True,verbose_name='Địa chỉ')
-    #bookid = models.CharField(max_length=200, null=True,blank=True)
-    id = models.AutoField(primary_key=True)
+    bookid = models.CharField(max_length=200, null=True,blank=True)
     firstdeposit = models.FloatField(null=True,verbose_name='Số tiền gửi')
     balance = models.FloatField(null=True,default=0)
     type = models.CharField(max_length=200, null=True,choices=TYPE,verbose_name='Loại tiết kiệm')
     date_created = models.DateTimeField(auto_now_add=True, null=True)
 
-    # def __str__(self):
-    #     return self.name
- 
+    
     def save(self, *args, **kwargs):
         self.balance = self.firstdeposit
- 
-
-        super(BankBook, self).save(*args, **kwargs)
+        
+        super(BankBooks, self).save(*args, **kwargs)
 
 class Orders(models.Model):
     STATUS = (
