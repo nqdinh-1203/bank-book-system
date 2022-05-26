@@ -111,7 +111,7 @@ class BankBookkk(models.Model):
     )
     #type = models.CharField(max_length=200, null=True,choices=TYPE,verbose_name='Loại tiết kiệm')
     date_created = models.DateTimeField(auto_now_add=True, null=True)
-    
+
     
     def save(self, *args, **kwargs):
         if self.balance == 0:
@@ -125,29 +125,22 @@ class BankBookkk(models.Model):
     def updateBalance(self):
         
         created_month = diff_month(timezone.now(), self.date_created)
-        print(created_month)
-        print(self.types.name)
-        print(self.types.interest_rate)
-        print(self.types.period)
-        # s
+        created_month = 2
         if self.types.name == 'Không kỳ hạn':
-            print('OK1')
             if created_month >= 1:
-                print('OK2')
-                self.balance = self.balance*(1+self.types.interest_rate)/100*(created_month)
-                print('OK3')
+                print(created_month)
+                print(type(self.balance*created_month))
+                print(type(1+self.types.interest_rate))
+                print((self.balance*created_month)*float(1+self.types.interest_rate))
+                self.balance = self.balance*created_month*float(1+self.types.interest_rate)
+                print(self.balance)
                 self.types.maximum_withdrawal_amount = self.balance
         else:
-            print('OK5')
-            self.balance = self.balance*(1+self.types.interest_rate)/100*(created_month//self.types.period)*self.types.period
-            print('OK5')
+            self.balance = self.balance*self.types.period*(created_month//self.types.period)*float(1+self.types.interest_rate)/100
             self.types.minimum_withdrawal_amount = self.balance
-            print('OK6')
             self.types.maximum_withdrawal_amount = self.balance
 
 
-            
-            
 
 class Orders(models.Model):
     STATUS = (
@@ -186,12 +179,16 @@ class Transaction(models.Model):
     depositamount = models.DecimalField(
         decimal_places=2,
         max_digits=12,
-        verbose_name='Số tiền gửi'
+        verbose_name='Số tiền gửi',
+        null=True,
+        default=0
     )
     withdrawalamount = models.DecimalField(
         decimal_places=2,
         max_digits=12,
-        verbose_name='Số tiền rút'
+        verbose_name='Số tiền rút',
+        null=True,
+        default=0
     )
     balance_after_transaction = models.DecimalField(
         decimal_places=2,

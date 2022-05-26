@@ -17,7 +17,7 @@ from account.decorators import unauthenticated_user
 # Create your views here.
 from .models import *
 from .forms import  OrderForm, CreateUserForm,CustomerForm,DepositForm,WithdrawForm
-from .filters import OrderFilter,MonthlyFilter,DailyFilter
+from .filters import OrderFilter,MonthlyFilter,DailyFilter,Search
 from .decorators import unauthenticated_user,allowed_users,admin_only
 
 @unauthenticated_user
@@ -246,66 +246,87 @@ def updateOrder(request,pk):
 def depositMoney(request):
 
     customer = request.user.customer
-    #bankbook = BankBookkk.objects.get(bookid=pk)
     form = DepositForm(instance=customer)
     if request.method == 'POST':
         form = DepositForm(request.POST,instance=customer)
         if form.is_valid():
             amount = form.cleaned_data.get('depositamount')
-            # print(amount)
-            # print(type(amount))
             id = form.cleaned_data.get('bankbookkk')
-            # print(id)
-            #customer = request.user.customer
-            #print(Customer.objects.filter(user=request.user).all().values())
-            #print(BankBookkk.objects.all().values())
-            #print(type(id))
+
             from django.db.models import Q
-            criterion1 = Q(customer=request.user.customer)
+            criterion1 = Q(customer=customer)
             criterion2 = Q(bookid=str(id))
-            # print(BankBookkk.objects.filter(criterion1 & criterion2).all().values())
+
             bankbookkk = BankBookkk.objects.filter(criterion1 & criterion2).first()
-            # print(bankbookkk)
-            # print(type(bankbookkk))
-            bankbookkk.updateBalance()
-            # print(bankbookkk.balance)
-            bankbookkk.balance = Decimal(bankbookkk.balance) + amount
-            # print(bankbookkk.balance)
-            bankbookkk.save(
-                update_fields=['balance']
-            )
-            # print(bankbookkk.balance)
-            bankbooks =  request.user.customer.bankbookkk_set.all().values()
-            # print(bankbooks)
-            messages.success(
-            request,
-            f'{amount}$ was deposited to your account successfully'
-            )
-            return redirect('/')
+            
+            if bankbookkk.types.period == 0:
+
+                bankbookkk.updateBalance()
+
+                min_deposit_amount = bankbookkk.types.minimum_deposit_amount
+                if amount < min_deposit_amount:
+                    messages.success(request, f'Bạn cần gửi tối thiểu {min_deposit_amount} ')
+                else:
+                    bankbookkk.balance = Decimal(bankbookkk.balance) + amount
+                    bankbookkk.save(
+                        update_fields=['balance']
+                    )
+                    return redirect('/')
+            else:
+                messages.info(request, 'Chỉ nhận gởi tiền với loại tiết kiệm không kỳ hạn.')
+
     context = {'form':form}
     return render(request, 'accounts/deposit_form.html',context)
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['customer'])
+def withdrawMoney(request):
 
-# class WithdrawMoneyView(TransactionCreateMixin):
-#     form_class = WithdrawForm
-#     title = 'Withdraw Money from Your Account'
+    customer = request.user.customer
+    form = WithdrawForm(instance=customer)
+    if request.method == 'POST':
+        form = WithdrawForm(request.POST,instance=customer)
+        if form.is_valid():
+            amount = form.cleaned_data.get('depositamount')
+            id = form.cleaned_data.get('bankbookkk')
 
-#     def get_initial(self):
-#         initial = {'transaction_type': WITHDRAWAL}
-#         return initial
+            from django.db.models import Q
+            criterion1 = Q(customer=customer)
+            criterion2 = Q(bookid=str(id))
 
-#     def form_valid(self, form):
-#         amount = form.cleaned_data.get('amount')
+            bankbookkk = BankBookkk.objects.filter(criterion1 & criterion2).first()
+            bankbookkk.updateBalance()
+            print(bankbookkk)
+            created_days = (timezone.now() - bankbookkk.date_created).days
+            created_months = (timezone.now() - bankbookkk.date_created).months
+            print(created_days,created_months)
+            if created_days < 15:
+                messages.success(request, f'Chỉ được rút tiền khi mở sổ ít nhất 15 ngày')
+                return
 
-#         self.request.user.account.balance -= form.cleaned_data.get('amount')
-#         self.request.user.account.save(update_fields=['balance'])
+            if bankbookkk.types.period != 0:
+                if created_months < bankbookkk.types.period:
+                    messages.success(request, f'Loại tiết kiệm có kỳ hạn chỉ đưọc rút khi quá kỳ hạn')
+                    return
 
-#         messages.success(
-#             self.request,
-#             f'Successfully withdrawn {amount}$ from your account'
-#         )
+            min_withdrawal_amount = bankbookkk.types.minimum_withdrawal_amount
+            max_withdrawal_amount = bankbookkk.types.maximum_withdrawal_amount
 
-#         return super().form_valid(form)
+            if amount < min_withdrawal_amount:
+                messages.success(request, f'Bạn cần rút tối thiểu {min_withdrawal_amount}')
+            elif amount > max_withdrawal_amount:
+                messages.success(request, f'Bạn chỉ được rút tối đa {max_withdrawal_amount}')
+            else:
+                bankbookkk.balance = Decimal(bankbookkk.balance) - amount
+                bankbookkk.save(
+                    update_fields=['balance']
+                )
+                return redirect('/')
+
+    context = {'form':form}
+    return render(request, 'accounts/withdraw_form.html',context)
+
+
 
 
 # @login_required(login_url='login')
@@ -341,4 +362,52 @@ def depositMoney(request):
 #             return redirect('/')
 #     context = {'formset': formset}
 #     return render(request,'accounts/order_form.html',context)
+    
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['customer'])
+def search(request):
+
+    bankbooks =  request.user.customer.bankbookkk_set.all()
+    myFilter = Search(request.GET, queryset=bankbooks)
+    bankbookres= myFilter.qs
+    
+    context = {'bankbooks':bankbooks,'bankbookres':bankbookres,'myFilter':myFilter}
+
+
+    return render(request,'accounts/search.html',context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def search(request):
+
+    bankbooks =  BankBookkk.objects.all()
+    myFilter = Search(request.GET, queryset=bankbooks)
+    bankbookres= myFilter.qs
+    
+    context = {'bankbooks':bankbooks,'bankbookres':bankbookres,'myFilter':myFilter}
+
+
+    return render(request,'accounts/search.html',context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def createDailyReport(request):
+
+    bankbooks =  BankBookkk.objects.all()
+    myFilter = DailyFilter(request.GET, queryset=bankbooks)
+    bankbookres= myFilter.qs
+
+    # transactions = Transaction.objects.all()
+    # myFilter = DailyFilter(request.GET, queryset=transactions)
+    # bankbookres= myFilter.qs
+    
+    # amounts = bankbookres.values('types').annotate(entries=Sum('depositamount'))
+    # context = {'customer':customer,'orders':orders,'orders_count':orders_count,
+    # 'myFilter':myFilter,'amounts':amounts}
+
+    context = {'bankbooks':bankbooks,'bankbookres':bankbookres,'myFilter':myFilter}
+    # context = {'transactions':transactions,'myFilter':myFilter}
+
+    return render(request,'accounts/daily.html',context)
+
     

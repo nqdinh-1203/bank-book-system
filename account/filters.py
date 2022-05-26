@@ -33,6 +33,8 @@ class OrderFilter(django_filters.FilterSet):
         fields = '__all__'
         exclude = ['customer','products','date_created','note']
 
+
+
 class MonthlyFilter(django_filters.FilterSet):
     type = MultipleChoiceFilter(
         field_name="type",
@@ -78,10 +80,16 @@ class DailyFilter(django_filters.FilterSet):
     date = DateFilter(field_name="date_created", label=('Ngày:'),
                     lookup_expr='contains',
                     widget=forms.widgets.DateInput(attrs={'type': 'date'}))
-
     class Meta:
         model = BankBookkk
-        fields='__all__'
-        exclude = ['customer','name','price','date_created','type']
+        fields = ['date_created']
+        exclude = ['date_created']
     
-
+class Search(django_filters.FilterSet):
+    date = DateFilter(field_name="date_created", label=('Ngày:'),
+                    lookup_expr='contains',
+                    widget=forms.widgets.DateInput(attrs={'type': 'date'}))
+    class Meta:
+        model = BankBookkk
+        fields = '__all__'
+        exclude = ['firstdeposit','balance','date_created']

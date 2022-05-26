@@ -31,17 +31,6 @@ class DepositForm(ModelForm):
             'customer_name',
             'depositamount',
         ]
-    def clean_amount(self):
-        bankbookk = self.bankbookk
-        min_deposit_amount = bankbookk.types.minimum_deposit_amount
-        amount = self.cleaned_data.get('depositamount')
-
-        if amount < min_deposit_amount:
-            raise forms.ValidationError(
-                f'Bạn cần gửi tối thiểu {min_deposit_amount} $'
-            )
-
-        return amount
 
 
 class WithdrawForm(ModelForm):
