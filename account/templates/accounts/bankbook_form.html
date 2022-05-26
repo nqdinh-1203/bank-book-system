@@ -2,6 +2,7 @@
 {% load static %}
 {% block content %}
 
+
 <div class="row">
     <div class="col_md_6">
         <div class="card card-body">
@@ -11,9 +12,16 @@
                 {% for form in formset%}
                     <!-- {{form}} -->
                     <table>
-                        {{ form.as_table }}
+                        {{ form.as_p }}
                       </table>
-                    <hr> <!--Empty line -->
+
+                      <!-- <div class="fieldWrapper">
+                        <label for="{{ form.type.id_for_label }}">Type:</label>
+                        {{ form.type }}
+                    </div> -->
+                    
+
+                    <hr> 
                 {% endfor %}
                 {% for message in messages %}
                     <p id="messages">{{message}}</p>

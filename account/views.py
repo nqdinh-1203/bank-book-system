@@ -8,13 +8,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.db.models import Sum
 from numpy import identity
+from django import forms
+from django.utils import timezone
 
 
 from account.decorators import unauthenticated_user 
 
 # Create your views here.
 from .models import *
-from .forms import  OrderForm, CreateUserForm,CustomerForm
+from .forms import  OrderForm, CreateUserForm,CustomerForm,DepositForm,WithdrawForm
 from .filters import OrderFilter,MonthlyFilter,DailyFilter
 from .decorators import unauthenticated_user,allowed_users,admin_only
 
@@ -112,9 +114,13 @@ def accountSettings(request):
 @allowed_users(allowed_roles=['customer'])
 def createBankBook(request):
     customer = request.user.customer
-    OrderFormSet = inlineformset_factory(Customer, BankBookkk, fields=('type','customer_name','identityid',
+
+    
+    OrderFormSet = inlineformset_factory(Customer, BankBookkk, fields=('types','customer_name','identityid',
                                                                      'customer_address','firstdeposit',
-                                                                     ),extra=1,can_delete=False)
+                                                                     ),extra=1,can_delete=False
+                                                                    #  ,initial=[{'date_created':timezone.now(),}]
+                                                                     )
     formset = OrderFormSet(queryset=BankBookkk.objects.none(),instance=customer)
     if request.method == 'POST':
         formset = OrderFormSet(request.POST,instance=customer)
@@ -203,11 +209,11 @@ def deleteOrder(request,pk):
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
 def createOrder(request,pk):
-    OrderFormSet = inlineformset_factory(Customer, BankBooks, fields=('type','customer_name','identityid',
+    OrderFormSet = inlineformset_factory(Customer, BankBookkk, fields=('type','customer_name','identityid',
                                                                     'customer_address','firstdeposit',
                                                                     ),extra=1)
     customer = Customer.objects.get(id=pk)
-    formset = OrderFormSet(queryset=BankBooks.objects.none(),instance=customer)
+    formset = OrderFormSet(queryset=BankBookkk.objects.none(),instance=customer)
     #form = OrderForm(initial={'customer':customer})
     if request.method == 'POST':
         #print('Printing POST: ',request.POST)
@@ -219,6 +225,90 @@ def createOrder(request,pk):
     context = {'formset': formset}
     return render(request,'accounts/order_form.html',context)
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def updateOrder(request,pk):
+    order = Orders.objects.get(id=pk)
+    form = OrderForm(instance=order)
+
+    if request.method == 'POST':
+        print('Printing POST: ',request.POST)
+        form = OrderForm(request.POST, instance=order)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+
+    context = {'form':form}
+    return render(request,'accounts/order_form.html',context)
+
+# @login_required(login_url='login')
+# @allowed_users(allowed_roles=['customer'])
+# def depositMoney(request):
+# @login_required(login_url='login')
+# @allowed_users(allowed_roles=['customer'])
+# def depositMoney(request):
+#     #bankbook = BankBookkk.objects.get(bookid=pk)
+#     form_class = DepositForm
+#     title = 'Deposit Money to Your Account'
+
+#     form = depos
+#     def get_initial(self):
+#         initial = {'transaction_type': DEPOSIT}
+#         return initial
+
+#     def form_valid(self, form):
+#         amount = form.cleaned_data.get('amount')
+#         account = self.request.user.account
+
+#         if not account.initial_deposit_date:
+#             now = timezone.now()
+#             next_interest_month = int(
+#                 12 / account.account_type.interest_calculation_per_year
+#             )
+#             account.initial_deposit_date = now
+#             account.interest_start_date = (
+#                 now + relativedelta(
+#                     months=+next_interest_month
+#                 )
+#             )
+
+#         account.balance += amount
+#         account.save(
+#             update_fields=[
+#                 'initial_deposit_date',
+#                 'balance',
+#                 'interest_start_date'
+#             ]
+#         )
+
+#         messages.success(
+#             self.request,
+#             f'{amount}$ was deposited to your account successfully'
+#         )
+
+#         return super().form_valid(form)
+
+
+# class WithdrawMoneyView(TransactionCreateMixin):
+#     form_class = WithdrawForm
+#     title = 'Withdraw Money from Your Account'
+
+#     def get_initial(self):
+#         initial = {'transaction_type': WITHDRAWAL}
+#         return initial
+
+#     def form_valid(self, form):
+#         amount = form.cleaned_data.get('amount')
+
+#         self.request.user.account.balance -= form.cleaned_data.get('amount')
+#         self.request.user.account.save(update_fields=['balance'])
+
+#         messages.success(
+#             self.request,
+#             f'Successfully withdrawn {amount}$ from your account'
+#         )
+
+#         return super().form_valid(form)
 
 
 # @login_required(login_url='login')
