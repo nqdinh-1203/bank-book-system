@@ -11,6 +11,7 @@ urlpatterns = [
     path('user/', views.userPage,name='user-page'),
     path('account/', views.accountSettings,name='account'),
     path('create_bankbook/',views.createBankBook,name='create_bankbook'),
+    path('deposit',views.depositMoney,name='deposit'),
     path('products/', views.products,name='products'),
     path('customer/<str:pk_test>/', views.customer,name='customer'),
     path('create_order/<str:pk>',views.createOrder,name='create_order'),

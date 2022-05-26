@@ -241,52 +241,49 @@ def updateOrder(request,pk):
     context = {'form':form}
     return render(request,'accounts/order_form.html',context)
 
-# @login_required(login_url='login')
-# @allowed_users(allowed_roles=['customer'])
-# def depositMoney(request):
-# @login_required(login_url='login')
-# @allowed_users(allowed_roles=['customer'])
-# def depositMoney(request):
-#     #bankbook = BankBookkk.objects.get(bookid=pk)
-#     form_class = DepositForm
-#     title = 'Deposit Money to Your Account'
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['customer'])
+def depositMoney(request):
 
-#     form = depos
-#     def get_initial(self):
-#         initial = {'transaction_type': DEPOSIT}
-#         return initial
-
-#     def form_valid(self, form):
-#         amount = form.cleaned_data.get('amount')
-#         account = self.request.user.account
-
-#         if not account.initial_deposit_date:
-#             now = timezone.now()
-#             next_interest_month = int(
-#                 12 / account.account_type.interest_calculation_per_year
-#             )
-#             account.initial_deposit_date = now
-#             account.interest_start_date = (
-#                 now + relativedelta(
-#                     months=+next_interest_month
-#                 )
-#             )
-
-#         account.balance += amount
-#         account.save(
-#             update_fields=[
-#                 'initial_deposit_date',
-#                 'balance',
-#                 'interest_start_date'
-#             ]
-#         )
-
-#         messages.success(
-#             self.request,
-#             f'{amount}$ was deposited to your account successfully'
-#         )
-
-#         return super().form_valid(form)
+    customer = request.user.customer
+    #bankbook = BankBookkk.objects.get(bookid=pk)
+    form = DepositForm(instance=customer)
+    if request.method == 'POST':
+        form = DepositForm(request.POST,instance=customer)
+        if form.is_valid():
+            amount = form.cleaned_data.get('depositamount')
+            # print(amount)
+            # print(type(amount))
+            id = form.cleaned_data.get('bankbookkk')
+            # print(id)
+            #customer = request.user.customer
+            #print(Customer.objects.filter(user=request.user).all().values())
+            #print(BankBookkk.objects.all().values())
+            #print(type(id))
+            from django.db.models import Q
+            criterion1 = Q(customer=request.user.customer)
+            criterion2 = Q(bookid=str(id))
+            # print(BankBookkk.objects.filter(criterion1 & criterion2).all().values())
+            bankbookkk = BankBookkk.objects.filter(criterion1 & criterion2).first()
+            # print(bankbookkk)
+            # print(type(bankbookkk))
+            bankbookkk.updateBalance()
+            # print(bankbookkk.balance)
+            bankbookkk.balance = Decimal(bankbookkk.balance) + amount
+            # print(bankbookkk.balance)
+            bankbookkk.save(
+                update_fields=['balance']
+            )
+            # print(bankbookkk.balance)
+            bankbooks =  request.user.customer.bankbookkk_set.all().values()
+            # print(bankbooks)
+            messages.success(
+            request,
+            f'{amount}$ was deposited to your account successfully'
+            )
+            return redirect('/')
+    context = {'form':form}
+    return render(request, 'accounts/deposit_form.html',context)
 
 
 # class WithdrawMoneyView(TransactionCreateMixin):

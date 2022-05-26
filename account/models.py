@@ -83,7 +83,6 @@ class BankBookkkType(models.Model):
     # Kỳ hạn của sổ tiết kiệm
     period = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(24)],
-        #help_text='The number of times interest will be calculated per year'
         help_text='Độ dài là 0 tương ứng với Không kỳ hạn',
         verbose_name='Độ dài kỳ hạn '
     )
@@ -104,6 +103,7 @@ class BankBookkk(models.Model):
     bookid = models.AutoField(primary_key=True)
     firstdeposit = models.FloatField(null=True,verbose_name='Số tiền gửi')
     balance = models.FloatField(null=True,default=0)
+
     types = models.ForeignKey(
         BankBookkkType,null=True,
         on_delete=models.CASCADE,
@@ -111,29 +111,41 @@ class BankBookkk(models.Model):
     )
     #type = models.CharField(max_length=200, null=True,choices=TYPE,verbose_name='Loại tiết kiệm')
     date_created = models.DateTimeField(auto_now_add=True, null=True)
-
+    
     
     def save(self, *args, **kwargs):
-        self.balance = self.firstdeposit
+        if self.balance == 0:
+            self.balance = self.firstdeposit
         super(BankBookkk, self).save(*args, **kwargs)
 
     def __str__(self):
-        return str(self.customer) + str(self.bookid)
+        return str(self.bookid)
     
 
     def updateBalance(self):
         
         created_month = diff_month(timezone.now(), self.date_created)
-        if self.type.name == 'Không kỳ hạn':
-            self.balance = self.balance*(1+self.type.interest_rate)/100*(created_month-1)
-            self.types.maximum_withdrawal_amount = self.balance
+        print(created_month)
+        print(self.types.name)
+        print(self.types.interest_rate)
+        print(self.types.period)
+        # s
+        if self.types.name == 'Không kỳ hạn':
+            print('OK1')
+            if created_month >= 1:
+                print('OK2')
+                self.balance = self.balance*(1+self.types.interest_rate)/100*(created_month)
+                print('OK3')
+                self.types.maximum_withdrawal_amount = self.balance
         else:
-            self.balance = self.balance*(1+self.type.interest_rate)/100*(created_month//self.type.period)*self.type.period
+            print('OK5')
+            self.balance = self.balance*(1+self.types.interest_rate)/100*(created_month//self.types.period)*self.types.period
+            print('OK5')
             self.types.minimum_withdrawal_amount = self.balance
+            print('OK6')
             self.types.maximum_withdrawal_amount = self.balance
 
 
-        self.types.maximum_withdrawal_amount
             
             
 
@@ -167,7 +179,7 @@ class Transaction(models.Model):
     bankbookkk = models.ForeignKey(
         BankBookkk,
         on_delete=models.CASCADE,
-        verbose_name='Mã sổ'
+        verbose_name='Mã sổ',
     )
     customer_name = models.CharField(max_length=200, null=True,verbose_name='Tên khách hàng')
     
