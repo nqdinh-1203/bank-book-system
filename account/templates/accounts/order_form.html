@@ -1,23 +1,23 @@
-{% extends 'accounts/main.html'%}
-{% load static %}
-{% block content %}
+{% extends 'accounts/main.html'%} {% load static %} {% block content %}
 
 <div class="row">
     <div class="col_md_6">
         <div class="card card-body">
             <form action="" method="POST">
-                {% csrf_token %} <!--Send data carefully -->
-                {{ formset.management_form}} <!--Save form individually -->
-                {% for form in formset%}
-                    {{form}}
-                    <table>
-                        {{ form.as_table }}
-                      </table>
-                    <hr> <!--Empty line -->
+                {% csrf_token %}
+                <!--Send data carefully -->
+                {{ formset.management_form}}
+                <!--Save form individually -->
+                {% for form in formset%} {{form}}
+                <table>
+                    {{ form.as_table }}
+                </table>
+                <hr>
+                <!--Empty line -->
                 {% endfor %}
 
 
-                <input type = "submit" name="Submit">
+                <input type="submit" name="Submit">
             </form>
         </div>
     </div>

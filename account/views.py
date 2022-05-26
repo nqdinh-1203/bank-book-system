@@ -219,8 +219,23 @@ def createOrder(request,pk):
     context = {'formset': formset}
     return render(request,'accounts/order_form.html',context)
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['customer', 'admin'])
+def checkout(request):
+    # orders = Orders.objects.all() 
+    # customers = Customer.objects.all()
+    
+    # total_customers = customers.count()
 
+    # total_orders = orders.count()
+    # delivered = orders.filter(status='Delivered').count()
+    # pending = orders.filter(status='Pending').count()
 
+    # context = {'orders':orders, 'customers': customers,
+    # 'total_customers':total_customers,'total_orders':total_orders,
+    # 'delivered':delivered,'pending':pending}
+    # return render(request, 'accounts/checkout.html',context)
+    return render(request, 'accounts/checkout.html') 
 # @login_required(login_url='login')
 # @allowed_users(allowed_roles=['admin'])
 # def createMonthlyReport(request,pk_test):
