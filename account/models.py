@@ -116,6 +116,7 @@ class BankBookkk(models.Model):
     def save(self, *args, **kwargs):
         if self.balance == 0:
             self.balance = self.firstdeposit
+            self.firstdeposit = 0
         super(BankBookkk, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -124,7 +125,8 @@ class BankBookkk(models.Model):
 
     def updateBalance(self):
         
-        created_month = diff_month(timezone.now(), self.date_created)
+        # created_month = diff_month(timezone.now(), self.date_created)
+        created_month = 10
         print(created_month)
         print(self.types.name)
         print(self.types.interest_rate)
@@ -134,12 +136,14 @@ class BankBookkk(models.Model):
             print('OK1')
             if created_month >= 1:
                 print('OK2')
-                self.balance = self.balance*(1+self.types.interest_rate)/100*(created_month)
+                print(self.balance)
+                self.balance = int(self.balance*float(1+self.types.interest_rate/100)*float(created_month))
+                print(self.balance)
                 print('OK3')
                 self.types.maximum_withdrawal_amount = self.balance
         else:
             print('OK5')
-            self.balance = self.balance*(1+self.types.interest_rate)/100*(created_month//self.types.period)*self.types.period
+            self.balance = int(self.balance*float(1+self.types.interest_rate/100)*float(created_month//self.types.period)*self.types.period)
             print('OK5')
             self.types.minimum_withdrawal_amount = self.balance
             print('OK6')
@@ -182,13 +186,17 @@ class Transaction(models.Model):
         verbose_name='Mã sổ',
     )
     customer_name = models.CharField(max_length=200, null=True,verbose_name='Tên khách hàng')
-    
+
     depositamount = models.DecimalField(
+        null=True,
+        default=0,
         decimal_places=2,
         max_digits=12,
         verbose_name='Số tiền gửi'
     )
     withdrawalamount = models.DecimalField(
+        null=True,
+        default=0,
         decimal_places=2,
         max_digits=12,
         verbose_name='Số tiền rút'

@@ -220,7 +220,7 @@ def createOrder(request,pk):
         #form = OrderForm(request.POST)
         formset = OrderFormSet(request.POST,instance=customer)
         if formset.is_valid():
-            formset.save()
+            formset.save(1)
             return redirect('/')
     context = {'formset': formset}
     return render(request,'accounts/order_form.html',context)
@@ -246,45 +246,103 @@ def updateOrder(request,pk):
 def depositMoney(request):
 
     customer = request.user.customer
-    #bankbook = BankBookkk.objects.get(bookid=pk)
     form = DepositForm(instance=customer)
     if request.method == 'POST':
         form = DepositForm(request.POST,instance=customer)
         if form.is_valid():
             amount = form.cleaned_data.get('depositamount')
-            # print(amount)
-            # print(type(amount))
             id = form.cleaned_data.get('bankbookkk')
-            # print(id)
-            #customer = request.user.customer
-            #print(Customer.objects.filter(user=request.user).all().values())
-            #print(BankBookkk.objects.all().values())
-            #print(type(id))
+
             from django.db.models import Q
-            criterion1 = Q(customer=request.user.customer)
+            criterion1 = Q(customer=customer)
             criterion2 = Q(bookid=str(id))
-            # print(BankBookkk.objects.filter(criterion1 & criterion2).all().values())
+
             bankbookkk = BankBookkk.objects.filter(criterion1 & criterion2).first()
-            # print(bankbookkk)
-            # print(type(bankbookkk))
-            bankbookkk.updateBalance()
-            # print(bankbookkk.balance)
-            bankbookkk.balance = Decimal(bankbookkk.balance) + amount
-            # print(bankbookkk.balance)
-            bankbookkk.save(
-                update_fields=['balance']
-            )
-            # print(bankbookkk.balance)
-            bankbooks =  request.user.customer.bankbookkk_set.all().values()
-            # print(bankbooks)
-            messages.success(
-            request,
-            f'{amount}$ was deposited to your account successfully'
-            )
-            return redirect('/')
+            print(bankbookkk)
+            
+            if bankbookkk.types.period == 0:
+
+                bankbookkk.updateBalance()
+
+                min_deposit_amount = bankbookkk.types.minimum_deposit_amount
+                if amount < min_deposit_amount:
+                    messages.success(request, f'Bạn cần gửi tối thiểu {min_deposit_amount} ')
+                else:
+                    bankbookkk.balance = Decimal(bankbookkk.balance) + amount
+                    bankbookkk.save(
+                        update_fields=['balance']
+                    )
+                    return redirect('/')
+            else:
+                messages.info(request, 'Chỉ nhận gởi tiền với loại tiết kiệm không kỳ hạn.')
     context = {'form':form}
     return render(request, 'accounts/deposit_form.html',context)
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['customer', 'admin'])
+def checkout(request):
+    customer = request.user.customer
+    form = WithdrawForm(instance=customer)
+    if request.method == 'POST':
+        form = WithdrawForm(request.POST,instance=customer)
+        if form.is_valid():
+            amount = form.cleaned_data.get('withdrawalamount')
+            id = form.cleaned_data.get('bankbookkk')
+
+            from django.db.models import Q
+            criterion1 = Q(customer=customer)
+            criterion2 = Q(bookid=str(id))
+
+            bankbookkk = BankBookkk.objects.filter(criterion1 & criterion2).first()
+            print(bankbookkk)
+            
+            import datetime
+
+            naive = datetime.datetime(2020, 5, 17)
+            now = datetime.datetime.now()
+
+            time_extract = now - naive
+
+            # print(time_extract.days)
+            if time_extract.days >= 15:
+                
+                bankbookkk.updateBalance()
+                min_money_checkout = bankbookkk.types.minimum_withdrawal_amount
+                max_money_checkout = bankbookkk.types.maximum_withdrawal_amount
+
+                flag = 0
+                if bankbookkk.types.name != 'Không kỳ hạn':
+                    naive = datetime.datetime(2023, 5, 26)
+                    date_created = datetime.datetime.strptime(str(bankbookkk.date_created.date()), "%Y-%m-%d")
+                    time_valid = naive - date_created
+                    # print(naive.date(), date_created.date(), time_valid)
+                    if time_valid.days < int(bankbookkk.types.period)*30:
+                        flag = 1
+                        messages.success(request, f'Bạn chưa tới kì hạn {bankbookkk.types.period} tháng')
+                if flag == 0:
+                    if amount < min_money_checkout:
+                        messages.success(request, f'Bạn cần rút tối thiểu {min_money_checkout} ')
+                    elif amount > max_money_checkout:
+                        messages.success(request, f'Bạn cần rút tối đa {max_money_checkout} ')
+                    else:
+                        print(bankbookkk.types.name)
+                        bankbookkk.balance = Decimal(bankbookkk.balance) - amount
+                        bankbookkk.save(
+                            update_fields=['balance']
+                        )
+                        if bankbookkk.balance == 0:
+                            # order = Orders.objects.get(id=pk)
+                            # if request.method == 'POST':
+                            #     order.delete()
+                            #     return redirect('/')
+                            # context = {'item':order}
+                            # return render(request,'accounts/delete.html',context)
+                            bankbookkk.delete()
+                        return redirect('/')
+            else:
+                messages.info(request, 'Sổ phải mở ít nhất 15 ngày.')
+    context = {'form':form}
+    return render(request, 'accounts/checkout.html', context)
 
 # class WithdrawMoneyView(TransactionCreateMixin):
 #     form_class = WithdrawForm
