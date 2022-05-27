@@ -1,7 +1,7 @@
 {% extends 'accounts/main.html'%}
 {% load static %}
 {% block content %}
-<h1>BÁO CÁO DOANH SỐ HOẠT ĐỘNG NGÀY</h1>
+<h1>BÁO CÁO MỞ/ĐÓNG SỔ THÁNG</h1>
 <br>
 <div class="row">
 	<div class="col">
@@ -15,6 +15,7 @@
 	
 </div>
 <br>
+<br>
 <h2>Kết quả tra cứu</h2>
 <div class="row">
 	<div class="col-md">
@@ -22,17 +23,17 @@
 			<table class="table table-sm">
 				<tr>
 					<th>STT</th>
-					<th>Loại tiết kiệm</th>
-					<th>Tổng thu</th>
-					<th>Tổng chi</th>
+					<th>Ngày</th>
+					<th>Sổ mở</th>
+					<th>Sổ đóng</th>
                     <th>Chênh lệch</th>
 				</tr>
 				{% for result in results%}
 				<tr>
 					<td>{{ forloop.counter }}</td>
-					<td> {{ result.bankbookkk__types__name }}</td>
-					<td> {{ result.deposit }}</td>
-					<td> {{ result.withdraw }}</td>
+					<td> {{ result.day }}</td>
+					<td> {{ result.open }}</td>
+					<td> {{ result.closed }}</td>
 					<td> {{ result.diff }}</td>
 				</tr>
 				{% endfor %}

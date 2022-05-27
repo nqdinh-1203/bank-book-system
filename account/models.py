@@ -31,8 +31,6 @@ class Tag(models.Model):
 
 class Products(models.Model):
     CATEGORY = (
-        # ('Indoor','Indoor'),
-        # ('Outdoor','Outdoor'),
         ('3 tháng','3 tháng'),
         ('6 tháng','6 tháng'),
         ('Không kỳ hạn','Không kỳ hạn')
@@ -109,13 +107,14 @@ class BankBookkk(models.Model):
         on_delete=models.CASCADE,
         verbose_name='Loại tiết kiệm'
     )
-    #type = models.CharField(max_length=200, null=True,choices=TYPE,verbose_name='Loại tiết kiệm')
     date_created = models.DateTimeField(auto_now_add=True, null=True)
+    is_delete = models.BooleanField(default=False,verbose_name='Sổ đã đóng hay chưa?')
 
     
     def save(self, *args, **kwargs):
         if self.balance == 0:
             self.balance = self.firstdeposit
+            self.firstdeposit = 0
         super(BankBookkk, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -126,17 +125,14 @@ class BankBookkk(models.Model):
         
         created_month = diff_month(timezone.now(), self.date_created)
         created_month = 2
+
+
         if self.types.name == 'Không kỳ hạn':
             if created_month >= 1:
-                print(created_month)
-                print(type(self.balance*created_month))
-                print(type(1+self.types.interest_rate))
-                print((self.balance*created_month)*float(1+self.types.interest_rate))
-                self.balance = self.balance*created_month*float(1+self.types.interest_rate)
-                print(self.balance)
+                self.balance = int(self.balance*float(1+self.types.interest_rate/100)*float(created_month))
                 self.types.maximum_withdrawal_amount = self.balance
         else:
-            self.balance = self.balance*self.types.period*(created_month//self.types.period)*float(1+self.types.interest_rate)/100
+            self.balance = int(self.balance*float(1+self.types.interest_rate/100)*float(created_month//self.types.period)*self.types.period)
             self.types.minimum_withdrawal_amount = self.balance
             self.types.maximum_withdrawal_amount = self.balance
 
@@ -194,27 +190,15 @@ class Transaction(models.Model):
         decimal_places=2,
         max_digits=12
     )
-    # transaction_type = models.PositiveSmallIntegerField(
-    #     choices=TRANSACTION_TYPE_CHOICES
-    # )
+
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return str(self.bankbookkk.bookid)
+        return str(self.bankbookkk.bookid) 
 
-    class Meta:
-        ordering = ['timestamp']
-
-
-# class MonthlyReport(models.Model):
-#     TYPE = (
-#         ('3 tháng','3 tháng'),
-#         ('6 tháng','6 tháng'),
-#         ('Không kỳ hạn','Không kỳ hạn'),
-#         )
-#     type = models.CharField(max_length=200, null=True,choices=TYPE)
+    def save(self, *args, **kwargs):
+        self.balance_after_transaction = 0
+        super(Transaction, self).save(*args, **kwargs)
 
 
-# class DailyReport(models.Model):
-    
     

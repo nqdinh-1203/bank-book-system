@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
-from django.db.models import Sum
+from django.db.models import Sum,Count
 from numpy import identity
 from django import forms
 from django.utils import timezone
@@ -81,8 +81,7 @@ def home(request):
 @allowed_users(allowed_roles=['customer'])
 def userPage(request):
     orders = request.user.customer.orders_set.all()
-    bankbooks = 1
-    bankbooks =  request.user.customer.bankbookkk_set.all()
+    bankbooks =  request.user.customer.bankbookkk_set.all().filter(is_delete=False)
     
     total_orders = orders.count()
     delivered = orders.filter(status='Delivered').count()
@@ -90,8 +89,6 @@ def userPage(request):
     print('ORDERS:',orders)
     print('BANKBOOKS:',bankbooks)
     
-    # for i in bankbooks:
-    #     print(i['amount'])
     context = {'orders':orders,'total_orders':total_orders,
     'delivered':delivered,'pending':pending,'bankbooks':bankbooks}
     return render(request, 'accounts/user.html',context)
@@ -115,7 +112,6 @@ def accountSettings(request):
 def createBankBook(request):
     customer = request.user.customer
 
-    
     OrderFormSet = inlineformset_factory(Customer, BankBookkk, fields=('types','customer_name','identityid',
                                                                      'customer_address','firstdeposit',
                                                                      ),extra=1,can_delete=False
@@ -126,13 +122,15 @@ def createBankBook(request):
         formset = OrderFormSet(request.POST,instance=customer)
         if formset.is_valid():
             money = formset.cleaned_data[0]['firstdeposit']
-
             if money >= 100000:
-                print('OK')
-                formset.save()
+                
+                bankbookkks = formset.save()
+                bankbookkk = bankbookkks[0]
+                Transaction.objects.create(bankbookkk=bankbookkk,
+                                                        depositamount = money,
+                                                        customer_name=formset.cleaned_data[0]['customer_name'])
                 return redirect('/')
             else: 
-                print('Not OK')
                 messages.info(request, 'Số tiền gửi tối thiếu là 100,000')
                 
     context = {'formset':formset} 
@@ -163,22 +161,6 @@ def customer(request,pk_test):
 
     return render(request, 'accounts/customer.html',context)
 
-# @login_required(login_url='login')
-# @allowed_users(allowed_roles=['admin'])
-# def createOrder(request,pk):
-#     OrderFormSet = inlineformset_factory(Customer, Orders, fields=('products','status','amount'),extra=5)
-#     customer = Customer.objects.get(id=pk)
-#     formset = OrderFormSet(queryset=Orders.objects.none(),instance=customer)
-#     #form = OrderForm(initial={'customer':customer})
-#     if request.method == 'POST':
-#         #print('Printing POST: ',request.POST)
-#         #form = OrderForm(request.POST)
-#         formset = OrderFormSet(request.POST,instance=customer)
-#         if formset.is_valid():
-#             formset.save()
-#             return redirect('/')
-#     context = {'formset': formset}
-#     return render(request,'accounts/order_form.html',context)
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
@@ -214,10 +196,7 @@ def createOrder(request,pk):
                                                                     ),extra=1)
     customer = Customer.objects.get(id=pk)
     formset = OrderFormSet(queryset=BankBookkk.objects.none(),instance=customer)
-    #form = OrderForm(initial={'customer':customer})
     if request.method == 'POST':
-        #print('Printing POST: ',request.POST)
-        #form = OrderForm(request.POST)
         formset = OrderFormSet(request.POST,instance=customer)
         if formset.is_valid():
             formset.save()
@@ -225,21 +204,6 @@ def createOrder(request,pk):
     context = {'formset': formset}
     return render(request,'accounts/order_form.html',context)
 
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
-def updateOrder(request,pk):
-    order = Orders.objects.get(id=pk)
-    form = OrderForm(instance=order)
-
-    if request.method == 'POST':
-        print('Printing POST: ',request.POST)
-        form = OrderForm(request.POST, instance=order)
-        if form.is_valid():
-            form.save()
-            return redirect('/')
-
-    context = {'form':form}
-    return render(request,'accounts/order_form.html',context)
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['customer'])
@@ -268,6 +232,10 @@ def depositMoney(request):
                     messages.success(request, f'Bạn cần gửi tối thiểu {min_deposit_amount} ')
                 else:
                     bankbookkk.balance = Decimal(bankbookkk.balance) + amount
+                    deposit = Transaction.objects.create(bankbookkk=bankbookkk,
+                                                        depositamount = amount,
+                                                        customer_name=form.cleaned_data.get('customer_name'))
+                    
                     bankbookkk.save(
                         update_fields=['balance']
                     )
@@ -326,46 +294,83 @@ def withdrawMoney(request):
     context = {'form':form}
     return render(request, 'accounts/withdraw_form.html',context)
 
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['customer'])
+def checkout(request):
+    customer = request.user.customer
+    form = WithdrawForm(instance=customer)
+    if request.method == 'POST':
+        form = WithdrawForm(request.POST,instance=customer)
+        if form.is_valid():
+            amount = form.cleaned_data.get('withdrawalamount')
+            id = form.cleaned_data.get('bankbookkk')
+
+            from django.db.models import Q
+            criterion1 = Q(customer=customer)
+            criterion2 = Q(bookid=str(id))
+
+            bankbookkk = BankBookkk.objects.filter(criterion1 & criterion2).first()
+            
+            if bankbookkk.balance == 0:
+                messages.success(request, f'Sổ đã đóng')
+                context = {'form':form}
+                return render(request, 'accounts/checkout.html', context)
 
 
+            import datetime
 
-# @login_required(login_url='login')
-# @allowed_users(allowed_roles=['admin'])
-# def createMonthlyReport(request,pk_test):
-#     customer = Customer.objects.get(id=pk_test)
+            naive = datetime.datetime(2020, 5, 17)
+            now = datetime.datetime.now()
 
-#     orders = customer.orders_set.all()
-#     orders_count= orders.count()
-#     bank_books = customer.bank_book_set.all()
-#     bank_book_count= bank_books.count()
-    
+            time_extract = now - naive
 
-#     myFilter = MonthlyFilter(request.GET, queryset=bank_books)
-#     bank_books = myFilter.qs
+            if time_extract.days >= 15:
+                
+                bankbookkk.updateBalance()
+                min_money_checkout = bankbookkk.types.minimum_withdrawal_amount
+                max_money_checkout = bankbookkk.types.maximum_withdrawal_amount
 
-#     bank_books = bank_books.filter
+                flag = 0
+                if bankbookkk.types.name != 'Không kỳ hạn':
+                    naive = datetime.datetime(2023, 5, 26)
+                    date_created = datetime.datetime.strptime(str(bankbookkk.date_created.date()), "%Y-%m-%d")
+                    time_valid = naive - date_created
+                    # print(naive.date(), date_created.date(), time_valid)
+                    if time_valid.days < int(bankbookkk.types.period)*30:
+                        flag = 1
+                        messages.success(request, f'Bạn chưa tới kì hạn {bankbookkk.types.period} tháng')
+                if flag == 0:
+                    if amount < min_money_checkout:
+                        messages.success(request, f'Bạn cần rút tối thiểu {min_money_checkout} ')
+                    elif amount > max_money_checkout:
+                        messages.success(request, f'Bạn cần rút tối đa {max_money_checkout} ')
+                    else:
+                        bankbookkk.balance = Decimal(bankbookkk.balance) - amount
+                        bankbookkk.save(
+                            update_fields=['balance']
+                        )
+                        Transaction.objects.create(bankbookkk=bankbookkk,
+                                                        withdrawalamount = amount,
+                                                        customer_name=form.cleaned_data.get('customer_name'))
+                        print(bankbookkk.balance)
+                        if bankbookkk.balance == 0:
+                           
+                            #bankbookkk.delete()
+                            bankbookkk.is_delete = True
+                            bankbookkk.save(
+                                update_fields=['is_delete']
+                            )
+                        return redirect('/')
+            else:
+                messages.info(request, 'Sổ phải mở ít nhất 15 ngày.')
+    context = {'form':form}
+    return render(request, 'accounts/checkout.html', context)
 
-#     context = {'customer':customer,'orders':orders,'orders_count':orders_count,
-#     'myFilter':myFilter}
-#     return render(request, 'accounts/customer.html',context)
 
-# @login_required(login_url='login')
-# @allowed_users(allowed_roles=['admin'])
-# def createDailyReport(request,pk):
-#     OrderFormSet = inlineformset_factory(Customer, Orders, fields=('products','status'),extra=5)
-#     customer = Customer.objects.get(id=pk)
-#     formset = OrderFormSet(queryset=Orders.objects.none(),instance=customer)
-#     if request.method == 'POST':
-#         formset = OrderFormSet(request.POST,instance=customer)
-#         if formset.is_valid():
-#             formset.save()
-#             return redirect('/')
-#     context = {'formset': formset}
-#     return render(request,'accounts/order_form.html',context)
     
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['customer'])
-def search(request):
+def search1(request):
 
     bankbooks =  request.user.customer.bankbookkk_set.all()
     myFilter = Search(request.GET, queryset=bankbooks)
@@ -378,7 +383,7 @@ def search(request):
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
-def search(request):
+def search2(request):
 
     bankbooks =  BankBookkk.objects.all()
     myFilter = Search(request.GET, queryset=bankbooks)
@@ -393,21 +398,37 @@ def search(request):
 @allowed_users(allowed_roles=['admin'])
 def createDailyReport(request):
 
-    bankbooks =  BankBookkk.objects.all()
-    myFilter = DailyFilter(request.GET, queryset=bankbooks)
-    bankbookres= myFilter.qs
+    transactions = Transaction.objects.all()
+    myFilter = DailyFilter(request.GET, queryset=transactions)
+    transactionres= myFilter.qs
 
-    # transactions = Transaction.objects.all()
-    # myFilter = DailyFilter(request.GET, queryset=transactions)
-    # bankbookres= myFilter.qs
-    
-    # amounts = bankbookres.values('types').annotate(entries=Sum('depositamount'))
-    # context = {'customer':customer,'orders':orders,'orders_count':orders_count,
-    # 'myFilter':myFilter,'amounts':amounts}
+    results = transactionres.values('bankbookkk__types__name').annotate(deposit=Sum('depositamount'),
+                                                                        withdraw=Sum('withdrawalamount'),
+                                                                        diff=Sum('depositamount')-Sum('withdrawalamount'))
 
-    context = {'bankbooks':bankbooks,'bankbookres':bankbookres,'myFilter':myFilter}
-    # context = {'transactions':transactions,'myFilter':myFilter}
+    context = {'transactions':transactions,'transactionres':transactionres,'myFilter':myFilter,'results':results}
 
     return render(request,'accounts/daily.html',context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
+def createMonthlyReport(request):
+
+    transactions = Transaction.objects.all()
+    myFilter = MonthlyFilter(request.GET, queryset=transactions)
+    transactionres= myFilter.qs
+
+    from django.db.models import Q
+    results = transactionres.extra(select={'day': 'date(timestamp)'})\
+                            .values('day')\
+                            .annotate(open=Count('bankbookkk__bookid',distinct=True),
+                                    closed=Count('bankbookkk__is_delete',only=Q(bankbookkk__is_delete=True)),
+                                    diff=Count('bankbookkk__bookid',distinct=True)-Count('bankbookkk__is_delete',only=Q(bankbookkk__is_delete=True))
+                                    )
+    
+
+    context = {'transactions':transactions,'transactionres':transactionres,'myFilter':myFilter,'results':results}
+
+    return render(request,'accounts/monthly.html',context)
 
     

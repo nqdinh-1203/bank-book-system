@@ -61,22 +61,24 @@
 				<tr>
 					<th>STT</th>
 					<th>Mã sổ</th>
+					<th>Ngày tạo</th>
 					<th>Loại tiết kiệm</th>
 					<th>Khách hàng</th>
                     <th>CMND/CCCD</th>
-                    <th>Địa chỉ</th>
                     <th>Số dư</th>
+					<th>Sổ đã đóng</th>
 				</tr>
 				
 				{% for bankbook in bankbooks%}
 					<tr>
                         <td>{{forloop.counter}}</td>
 						<td>{{bankbook.bookid}}</td>
+						<td>{{bankbook.date_created}}</td>
 						<td>{{bankbook.types.name}}</td>
 						<td>{{bankbook.customer_name}}</td>
                         <td>{{bankbook.identityid}}</td>
-                        <td>{{bankbook.customer_address}}</td>
                         <td>{{bankbook.balance}}</td>
+						<td>{{bankbook.is_delete}}</td>
 					</tr>
 				{% endfor %}
 

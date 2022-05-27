@@ -25,10 +25,13 @@
         <a class="nav-link" href="{% url 'products' %}">Products</a>
       </li>
       <li style="max-width:100px; margin-top: -2px; margin-right: 5px;" class="nav-item">
-        <a class="navlink" href="{% url 'search' %}">Tra cứu sổ</a>
+        <a class="navlink" href="{% url 'search2' %}">Tra cứu sổ</a>
       </li>
       <li style="max-width:100px; margin-top: -2px; margin-right: 5px;" class="nav-item">
         <a class="navlink" href="{% url 'daily' %}">Báo cáo ngày</a>
+      </li>
+      <li style="max-width:100px; margin-top: -2px; margin-right: 5px;" class="nav-item">
+        <a class="navlink" href="{% url 'monthly' %}">Báo cáo tháng</a>
       </li>
       {% else %}
       <li style="max-width:100px; margin-top: -2px; margin-right: 5px;" class="nav-item">
@@ -41,10 +44,10 @@
         <a class="navlink" href="{% url 'deposit' %}">Gửi tiền</a>
       </li>
       <li style="max-width:100px; margin-top: -2px; margin-right: 5px;" class="nav-item">
-        <a class="navlink" href="{% url 'withdraw' %}">Rút tiền</a>
+        <a class="navlink" href="{% url 'checkout' %}">Rút tiền</a>
       </li>
       <li style="max-width:100px; margin-top: -2px; margin-right: 5px;" class="nav-item">
-        <a class="navlink" href="{% url 'search' %}">Tra cứu sổ</a>
+        <a class="navlink" href="{% url 'search1' %}">Tra cứu sổ</a>
       </li>
       {% endif %}
     </ul>
