@@ -116,8 +116,8 @@ def createBankBook(request):
     customer = request.user.customer
 
     
-    OrderFormSet = inlineformset_factory(Customer, BankBookkk, fields=('types','customer_name','identityid',
-                                                                     'customer_address','firstdeposit',
+    OrderFormSet = inlineformset_factory(Customer, BankBookkk, fields=('customer_name','identityid',
+                                                                     'customer_address','firstdeposit','types'
                                                                      ),extra=1,can_delete=False
                                                                     #  ,initial=[{'date_created':timezone.now(),}]
                                                                      )
