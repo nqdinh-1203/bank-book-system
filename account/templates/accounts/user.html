@@ -1,60 +1,58 @@
-{% extends 'accounts/main.html'%}
-{% block content %}
-{% include 'accounts/status.html' %}
+{% extends 'accounts/main.html'%} {% block content %} {% include 'accounts/status.html' %}
 
-<div class="row">
-	<div class="col-md">
-		<div class="card card-body">
-			<table class="table table-sm">
-				<tr>
-					<th>Product</th>
-					<th>Note</th>
-					<th>Date Order</th>
-					<th>Status</th>
-				</tr>
-				
-				{% for order in orders%}
-					<tr>
-						<td>{{order.products}}</td>
-						<td>{{order.note}}</td>
-						<td>{{order.date_created}}</td>
-						<td>{{order.status}}</td>
-					</tr>
-				{% endfor %}
+<!-- <div class="row">
+    <div class="col-md">
+        <div class="card card-body">
+            <table class="table table-sm"> -->
+<!-- <tr>
+                    <th>Product</th>
+                    <th>Note</th>
+                    <th>Date Order</th>
+                    <th>Status</th>
+                </tr>
 
-			</table>
-		</div>
-	</div>
-</div>
+                {% for order in orders%}
+                <tr>
+                    <td>{{order.products}}</td>
+                    <td>{{order.note}}</td>
+                    <td>{{order.date_created}}</td>
+                    <td>{{order.status}}</td>
+                </tr>
+                {% endfor %} -->
+<!-- 
+            </table>
+        </div>
+    </div>
+</div> -->
 
-<div class="row">
-	<div class="col-md">
-		<div class="card card-body">
-			<table class="table table-sm">
-				<tr>
-					<th>STT</th>
-					<th>Mã sổ</th>
-					<th>Loại tiết kiệm</th>
-					<th>Khách hàng</th>
-					<th>Ngày tạo</th>
-					<th>Số dư</th>
-				</tr>
+<!-- <div class="row">
+    <div class="col-md">
+        <div class="card card-body">
+            <table class="table table-sm"> -->
+<!-- <tr>
+                    <th>Mã sổ</th>
+                    <th>Loại tiết kiệm</th>
+                    <th>Tên</th>
+                    <th>Ngày tạo</th>
+                    <th>Địa chỉ</th>
+                    <th>Số dư</th>
+                </tr>
 
-				{% for bankbook in bankbooks%}
-				<tr>
-					<td>{{forloop.counter}}</td>
-					<td>{{bankbook.bookid}}</td>
-					<td>{{bankbook.types}}</td>
-					<td>{{bankbook.customer_name}}</td>
-					<td>{{bankbook.date_created}}</td>
-					<td>{{bankbook.balance}}</td>
-				</tr>
-			{% endfor %}
+                {% for bankbook in bankbooks%}
+                <tr>
+                    <td>{{bankbook.bookid}}</td>
+                    <td>{{bankbook.type}}</td>
+                    <td>{{bankbook.customer_name}}</td>
+                    <td>{{bankbook.date_created}}</td>
+                    <td>{{bankbook.customer_address}}</td>
+                    <td>{{bankbook.balance}}</td>
+                </tr>
+                {% endfor %} -->
 
 
-			</table>
-		</div>
-	</div>
-</div>
+<!-- </table>
+        </div>
+    </div>
+</div> -->
 
 {% endblock content %}

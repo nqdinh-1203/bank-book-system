@@ -33,55 +33,44 @@ class OrderFilter(django_filters.FilterSet):
         fields = '__all__'
         exclude = ['customer','products','date_created','note']
 
+
+
 class MonthlyFilter(django_filters.FilterSet):
-    type = MultipleChoiceFilter(
-        field_name="type",
-        choices=(
-        ('3 tháng','3 tháng'),
-        ('6 tháng','6 tháng'),
-        ('Không kỳ hạn','Không kỳ hạn')
-        ),
+    type = ModelMultipleChoiceFilter(
+        field_name="bankbookkk__types",
+        queryset=BankBookkkType.objects.all(),
         label=('Loại tiết kiệm:'),
-        conjoined=True,
+        conjoined=False,
         widget=forms.CheckboxSelectMultiple,
         )
-    MONTH_CHOICES = [
-        ('January', 'January'),
-        ('February', 'February'),
-        ('March', 'March'),
-        ('April', 'April'),
-        ('May', 'May'),
-        ('June', 'June'),
-        ('July', 'July'),
-        ('August', 'August'),
-        ('September', 'September'),
-        ('October', 'October'),
-        ('November', 'November'),
-        ('December', 'December'),
 
-    ]
-    #month = CharFilter(field_name='date_created',lookup_expr='icontains')
-    month = forms.CharField(widget=forms.Select(choices=MONTH_CHOICES), label="Select a month ")
-    # date = DateFilter(field_name="date_created", label=('Ngày:'),
-    #                 lookup_expr='contains',
-    #                 widget=forms.widgets.DateInput(attrs={'type': 'date'}))
-
-
+    month = CharFilter(field_name="timestamp", label=('Tháng:'),
+                    lookup_expr='icontains',
+                    widget=forms.DateInput(attrs={'type': 'month'})
+                    )
     class Meta:
         model = BankBookkk
-        fields=['type']
-        #fields = '__all__'
-        #exclude = ['customer','date_created','price','date_created','type']
+        fields=['types']
+        exclude = ['types']
+
 
 class DailyFilter(django_filters.FilterSet):
  
+    date = DateFilter(field_name="timestamp", label=('Ngày:'),
+                    lookup_expr='contains',
+                    widget=forms.widgets.DateInput(attrs={'type': 'date'}))
+    class Meta:
+        model = BankBookkk
+        fields = ['date_created']
+        exclude = ['date_created']
+
+
+    
+class Search(django_filters.FilterSet):
     date = DateFilter(field_name="date_created", label=('Ngày:'),
                     lookup_expr='contains',
                     widget=forms.widgets.DateInput(attrs={'type': 'date'}))
-
     class Meta:
         model = BankBookkk
-        fields='__all__'
-        exclude = ['customer','name','price','date_created','type']
-    
-
+        fields = '__all__'
+        exclude = ['firstdeposit','balance','date_created']
