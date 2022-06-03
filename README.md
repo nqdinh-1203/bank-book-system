@@ -22,10 +22,10 @@ Một số tính năng chính:
 
 # Các project được tham khảo
 
-**Playlist hướng dẫn về Django của youtuber DennisIvy: https://www.youtube.com/playlist?list=PL-51WBLyFTg2vW-_6XBoUpE7vpmoR3ztO 
+**Playlist hướng dẫn về Django của youtuber DennisIvy:** https://www.youtube.com/playlist?list=PL-51WBLyFTg2vW-_6XBoUpE7vpmoR3ztO <br>
 **Simple Banking System in Django with Source Code - CodeAstro**
 https://codeastro.com/simple-banking-system-in-python-django-with-source-code/ 
-https://www.youtube.com/watch?v=s-T0MbXjz34
+https://www.youtube.com/watch?v=s-T0MbXjz34 <br>
 
 **Phần front end** được vẽ ở trang https://www.figma.com/ từ đó dùng 1 số công cụ để chuyển sang html và css
 
