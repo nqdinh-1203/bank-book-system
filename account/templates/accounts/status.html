@@ -65,8 +65,8 @@
 <div class="name"></div>
 <div class="v1_30">
     <div class="col-md">
-        <div class="card card-body">
-            <table class="table table-sm">
+        <div class="table-wrapper-scroll-y my-custom-scrollbar">
+            <table class="table table-bordered table-striped mb-0">
                 <tr>
                     <th>Mã sổ</th>
                     <th>Loại tiết kiệm</th>
@@ -109,6 +109,16 @@
     
     body {
         font-size: 14px;
+    }
+    
+    .my-custom-scrollbar {
+        position: relative;
+        height: 450px;
+        overflow: auto;
+    }
+    
+    .table-wrapper-scroll-y {
+        display: block;
     }
     
     .v1_5 {

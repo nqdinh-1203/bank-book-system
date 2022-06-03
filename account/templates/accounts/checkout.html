@@ -134,8 +134,8 @@
                         <div class="v1_140"></div>
                     </div> -->
                     <div class="col-md">
-                        <div class="card card-body">
-                            <table class="table table-sm">
+                        <div class="table-wrapper-scroll-y my-custom-scrollbar">
+                            <table class="table table-bordered table-striped mb-0">
                                 <tr>
                                     <th>Mã sổ</th>
                                     <th>Loại tiết kiệm</th>
@@ -159,17 +159,18 @@
 
                             </table>
                         </div>
+                        <script>
+                            $(document).ready(function() {
+                                $('#dtVerticalScrollExample').DataTable({
+                                    "scrollY": "200px",
+                                    "scrollCollapse": true,
+                                });
+                                $('.dataTables_length').addClass('bs-select');
+                            });
+                        </script>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="v1_143">
-            <div class="v1_144"><span class="v1_145">Prev</span></div>
-            <div class="v1_146"><span class="v1_147">1</span></div>
-            <div class="v1_148"><span class="v1_149">2</span></div>
-            <div class="v1_150"><span class="v1_151">3</span></div>
-            <div class="v1_152"><span class="v1_153">4</span></div>
-            <div class="v1_154"><span class="v1_155">Next</span></div>
         </div>
         <div class="name"></div>
         <div class="v109_230">
@@ -220,6 +221,16 @@
     
     body {
         font-size: 14px;
+    }
+    
+    .my-custom-scrollbar {
+        position: relative;
+        height: 450px;
+        overflow: auto;
+    }
+    
+    .table-wrapper-scroll-y {
+        display: block;
     }
     
     .e109_230 {
