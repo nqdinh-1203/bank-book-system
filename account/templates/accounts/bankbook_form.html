@@ -1,0 +1,37 @@
+{% extends 'accounts/main.html'%}
+{% load static %}
+{% block content %}
+
+
+<div class="row">
+    <div class="col_md_6">
+        <div class="card card-body">
+            <form action="" method="POST">
+                {% csrf_token %} <!--Send data carefully -->
+                {{ formset.management_form}} <!--Save form individually -->
+                {% for form in formset%}
+                    <!-- {{form}} -->
+                    <table>
+                        {{ form.as_p }}
+                      </table>
+
+                      <!-- <div class="fieldWrapper">
+                        <label for="{{ form.type.id_for_label }}">Type:</label>
+                        {{ form.type }}
+                    </div> -->
+                    
+
+                    <hr> 
+                {% endfor %}
+                {% for message in messages %}
+                    <p id="messages">{{message}}</p>
+                {% endfor %}
+
+
+                <input type = "submit" name="Submit">
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
