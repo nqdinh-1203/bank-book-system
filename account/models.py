@@ -123,6 +123,7 @@ class BankBookkk(models.Model):
 
     def updateBalance(self):
         
+        #created_month = 2
         import datetime
         naive = datetime.datetime(2023, 5, 26)
         date_created = datetime.datetime.strptime(str(self.date_created.date()), "%Y-%m-%d")

@@ -46,10 +46,10 @@
 <div class="v1_8">
     <div class="v1_9"></div>
     <span class="v1_10">Total books</span>
-    <span class="v1_11">{{total_orders}}</span></div>
+    <span class="v1_11">{{total_bankbooks}}</span></div>
 <div class="v1_12">
     <div class="v1_13"></div>
-    <span class="v1_14">Orders Delivered</span>
+    <span class="v1_14">Book closed</span>
     <span class="v1_15">{{delivered}}</span>
 </div>
 <span class="v1_16">Filter By</span>
@@ -59,7 +59,7 @@
     </div>
 </div>
 <div class="v1_21">
-    <div class="v1_22"></div><span class="v1_23">Orders Pending</span>
+    <div class="v1_22"></div><span class="v1_23">Book available</span>
     <span class="v1_15">{{pending}}</span></div>
 </div>
 <div class="name"></div>
@@ -91,14 +91,14 @@
         </div>
     </div>
 </div>
-<div class="v1_78">
+<!-- <div class="v1_78">
     <div class="v1_79"><span class="v1_80">Prev</span></div>
     <div class="v1_81"><span class="v1_82">1</span></div>
     <div class="v1_83"><span class="v1_84">2</span></div>
     <div class="v1_85"><span class="v1_86">3</span></div>
     <div class="v1_87"><span class="v1_88">4</span></div>
     <div class="v1_89"><span class="v1_90">Next</span></div>
-</div>
+</div> -->
 <div class="name"></div>
 </div>
 
@@ -177,6 +177,11 @@
         border-bottom-left-radius: 2px;
         border-bottom-right-radius: 2px;
         box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+        border: 3px solid rgba(232, 225, 225, 1);
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
         overflow: hidden;
     }
     
@@ -190,19 +195,20 @@
         font-weight: Light;
         font-size: 23px;
         opacity: 1;
-        text-align: left;
+        text-align: center;
     }
     
     .v1_11 {
         width: 155px;
         color: rgba(35, 102, 181, 1);
         position: absolute;
-        top: 89px;
+        top: 75px;
         left: 75px;
         font-family: Quicksand;
         font-weight: Light;
         opacity: 1;
-        text-align: left;
+        font-size: 50px;
+        text-align: center;
     }
     
     .v1_12 {
@@ -232,6 +238,11 @@
         border-bottom-left-radius: 2px;
         border-bottom-right-radius: 2px;
         box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+        border: 3px solid rgba(232, 225, 225, 1);
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
         overflow: hidden;
     }
     
@@ -252,12 +263,13 @@
         width: 173px;
         color: rgba(35, 102, 181, 1);
         position: absolute;
-        top: 89px;
+        top: 75px;
         left: 65px;
         font-family: Quicksand;
+        font-size: 50px;
         font-weight: Light;
         opacity: 1;
-        text-align: left;
+        text-align: center;
     }
     
     .v1_16 {
@@ -354,16 +366,16 @@
     }
     
     .v1_23 {
-        width: 151px;
-        color: rgba(82, 82, 82, 1);
+        width: 200px;
+        color: rgba(0, 0, 0, 1);
         position: absolute;
         top: 25px;
-        left: 78px;
+        left: 65px;
         font-family: Quicksand;
         font-weight: Light;
-        font-size: 19px;
+        font-size: 23px;
         opacity: 1;
-        text-align: left;
+        text-align: center;
     }
     
     .v1_24 {
@@ -445,7 +457,7 @@
     }
     
     .v1_30 {
-        width: 941px;
+        width: 1010px;
         height: 349px;
         background: url("../images/v1_30.png");
         background-repeat: no-repeat;

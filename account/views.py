@@ -66,15 +66,17 @@ def logoutUser(request):
 def home(request):
     orders = Orders.objects.all() 
     customers = Customer.objects.all()
-    
+    bankbooks =  BankBookkk.objects.all()
+
     total_customers = customers.count()
 
-    total_orders = orders.count()
+    total_bankbooks = bankbooks.count()
     delivered = orders.filter(status='Delivered').count()
     pending = orders.filter(status='Pending').count()
 
+    # print('Douma', total_bankbooks)
     context = {'orders':orders, 'customers': customers,
-    'total_customers':total_customers,'total_orders':total_orders,
+    'total_customers':total_customers,'total_bankbooks':15,
     'delivered':delivered,'pending':pending}
     return render(request, 'accounts/dashboard.html',context)
 
@@ -83,15 +85,16 @@ def home(request):
 def userPage(request):
     orders = request.user.customer.orders_set.all()
     bankbooks =  request.user.customer.bankbookkk_set.all().filter(is_delete=False)
+    bankbooks_del =  request.user.customer.bankbookkk_set.all().filter(is_delete=True)
     
-    total_orders = orders.count()
-    delivered = orders.filter(status='Delivered').count()
+    total_bankbooks = bankbooks.count()
+    delivered = bankbooks_del.count()
     pending = orders.filter(status='Pending').count()
     print('ORDERS:',orders)
     print('BANKBOOKS:',bankbooks)
     
-    context = {'orders':orders,'total_orders':total_orders,
-    'delivered':delivered,'pending':pending,'bankbooks':bankbooks}
+    context = {'orders':orders,'total_bankbooks':total_bankbooks,
+    'delivered':delivered,'pending':total_bankbooks-delivered,'bankbooks':bankbooks}
     return render(request, 'accounts/user.html',context)
 
 @login_required(login_url='login')
@@ -114,8 +117,8 @@ def createBankBook(request):
     customer = request.user.customer
 
     OrderFormSet = inlineformset_factory(Customer, BankBookkk, fields=('types','customer_name','identityid',
-                                                                     'customer_address','firstdeposit'
-                                                                     ),extra=1,can_delete=False,
+                                                                     'customer_address','firstdeposit',
+                                                                     ),extra=1,can_delete=False
                                                                     #  ,initial=[{'date_created':timezone.now(),}]
                                                                      )
     formset = OrderFormSet(queryset=BankBookkk.objects.none(),instance=customer)
@@ -132,7 +135,7 @@ def createBankBook(request):
                                                         customer_name=formset.cleaned_data[0]['customer_name'])
                 return redirect('/')
             else: 
-                messages.success(request, 'Số tiền gửi tối thiếu là 100,000')
+                messages.info(request, 'Số tiền gửi tối thiếu là 100,000')
                 
     context = {'formset':formset} 
     return render(request, 'accounts/bankbook_form.html',context)
@@ -300,6 +303,7 @@ def withdrawMoney(request):
 def checkout(request):
     customer = request.user.customer
     form = WithdrawForm(instance=customer)
+    bankbooks =  request.user.customer.bankbookkk_set.all().filter(is_delete=False)
     if request.method == 'POST':
         form = WithdrawForm(request.POST,instance=customer)
         if form.is_valid():
@@ -362,10 +366,11 @@ def checkout(request):
                             bankbookkk.save(
                                 update_fields=['is_delete']
                             )
+
                         return redirect('/')
             else:
                 messages.info(request, 'Sổ phải mở ít nhất 15 ngày.')
-    context = {'form':form}
+    context = {'form':form,'bankbooks': bankbooks}
     return render(request, 'accounts/checkout.html', context)
 
 
