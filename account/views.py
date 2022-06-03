@@ -1,4 +1,3 @@
-from typing_extensions import Required
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.forms import inlineformset_factory
@@ -11,7 +10,6 @@ from django.db.models import Sum,Count
 from numpy import identity
 from django import forms
 from django.utils import timezone
-from pkg_resources import require
 from .models import *
 
 

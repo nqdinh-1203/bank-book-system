@@ -100,7 +100,7 @@ class BankBookkk(models.Model):
     customer_address = models.CharField(max_length=200, null=True,verbose_name='Địa chỉ')
     bookid = models.AutoField(primary_key=True)
     firstdeposit = models.FloatField(null=True,verbose_name='Số tiền gửi')
-    balance = models.FloatField(null=True,default=0)
+    balance = models.FloatField(null=True,default=-1)
 
     types = models.ForeignKey(
         BankBookkkType,null=True,
@@ -112,7 +112,7 @@ class BankBookkk(models.Model):
 
     
     def save(self, *args, **kwargs):
-        if self.balance == 0:
+        if self.balance == -1:
             self.balance = self.firstdeposit
             self.firstdeposit = 0
         super(BankBookkk, self).save(*args, **kwargs)
@@ -123,16 +123,18 @@ class BankBookkk(models.Model):
 
     def updateBalance(self):
         
-        created_month = diff_month(timezone.now(), self.date_created)
-        created_month = 2
-
+        import datetime
+        naive = datetime.datetime(2023, 5, 26)
+        date_created = datetime.datetime.strptime(str(self.date_created.date()), "%Y-%m-%d")
+        time_valid = naive - date_created
+        created_month = (time_valid // 30).days
 
         if self.types.name == 'Không kỳ hạn':
             if created_month >= 1:
                 self.balance = int(self.balance*float(1+self.types.interest_rate/100)*float(created_month))
                 self.types.maximum_withdrawal_amount = self.balance
         else:
-            self.balance = int(self.balance*float(1+self.types.interest_rate/100)*float(created_month//self.types.period)*self.types.period)
+            self.balance = int(self.balance*float(1+self.types.interest_rate/100)*float(created_month// self.types.period)*self.types.period)
             self.types.minimum_withdrawal_amount = self.balance
             self.types.maximum_withdrawal_amount = self.balance
 
