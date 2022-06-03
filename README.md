@@ -22,6 +22,7 @@ Một số tính năng chính:
 
 # Các project được tham khảo
 
+**Playlist hướng dẫn về Django của youtuber DennisIvy: https://www.youtube.com/playlist?list=PL-51WBLyFTg2vW-_6XBoUpE7vpmoR3ztO 
 **Simple Banking System in Django with Source Code - CodeAstro**
 https://codeastro.com/simple-banking-system-in-python-django-with-source-code/ 
 https://www.youtube.com/watch?v=s-T0MbXjz34
