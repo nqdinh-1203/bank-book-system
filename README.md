@@ -115,6 +115,7 @@ DATABASES =
 
 <blockquote>
 </details>
+
 ## Cuối cùng kết nối Heroku với Postgres 
 <details><summary>Click to expand</summary>
 
@@ -137,7 +138,7 @@ DATABASES =
 
 ## Đường dẫn tới project trên Heroku
 Link Heroku: https://theblues-crm1.herokuapp.com/ 
-### Để cập nhật code ở local trên project để deploy lên Heroku ta thực hiện các bước sau:
+### Để cập nhật code ở local đến project đã deploy lên Heroku ta thực hiện các bước sau:
 - heroku git:clone -a theblues-crm1
 - cd theblues-crm1
 - git add .
