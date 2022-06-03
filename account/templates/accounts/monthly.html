@@ -1,0 +1,60 @@
+{% extends 'accounts/main.html'%}
+{% load static %}
+{% block content %}
+<h1>BÁO CÁO MỞ/ĐÓNG SỔ THÁNG</h1>
+<br>
+<div class="row">
+	<div class="col">
+		<div class="card card-body">
+			<form method="get">
+				{{myFilter.form.as_p}}
+		    <button class="btn btn-primary" type="submit">Search</button>
+		  </form>
+		</div>
+	</div>
+	
+</div>
+<br>
+<br>
+<h2>Kết quả tra cứu</h2>
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+					<th>STT</th>
+					<th>Ngày</th>
+					<th>Sổ mở</th>
+					<th>Sổ đóng</th>
+                    <th>Chênh lệch</th>
+				</tr>
+				{% for result in results%}
+				<tr>
+					<td>{{ forloop.counter }}</td>
+					<td> {{ result.day }}</td>
+					<td> {{ result.open }}</td>
+					<td> {{ result.closed }}</td>
+					<td> {{ result.diff }}</td>
+				</tr>
+				{% endfor %}
+
+			</table>
+		</div>
+	</div>
+</div>
+<style>
+    h1 {
+        height:100px;
+        width:500px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    h2 {
+        height:50px;
+        width:500px;
+        margin: 0 auto;
+        text-align: center;
+    }
+    </style>
+{% endblock content %}
+

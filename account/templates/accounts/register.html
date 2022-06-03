@@ -1,140 +1,480 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
-    
+
 <head>
-	<title>Login</title>
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
-
-	<style>
-		body,
-		html {
-			margin: 0;
-			padding: 0;
-			height: 100%;
-			background: #7abecc !important;
-		}
-		.user_card {
-			width: 350px;
-			margin-top: auto;
-			margin-bottom: auto;
-			background: #74cfbf;
-			position: relative;
-			display: flex;
-			justify-content: center;
-			flex-direction: column;
-			padding: 10px;
-			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-			-webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-			-moz-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-			border-radius: 5px;
-
-		}
-
-		.form_container {
-			margin-top: 20px;
-		}
-
-		#form-title{
-			color: #fff;
-		}
-		.login_btn {
-			width: 100%;
-			background: #33ccff !important;
-			color: white !important;
-		}
-		.login_btn:focus {
-			box-shadow: none !important;
-			outline: 0px !important;
-		}
-		.login_container {
-			padding: 0 2rem;
-		}
-		.input-group-text {
-			background: #f7ba5b !important;
-			color: white !important;
-			border: 0 !important;
-			border-radius: 0.25rem 0 0 0.25rem !important;
-		}
-		.input_user,
-		.input_pass:focus {
-			box-shadow: none !important;
-			outline: 0px !important;
-		}
-
-	</style>
-
+    <link href="https://fonts.googleapis.com/css?family=Poppins&display=swap" rel="stylesheet" />
 </head>
+
 <body>
-	<div class="container h-100">
-		<div class="d-flex justify-content-center h-100">
-			<div class="user_card">
-				<div class="d-flex justify-content-center">
-					<h3 id="form-title">REGISTER ACCOUNT</h3>
-				</div>
-				<div class="d-flex justify-content-center form_container">
+    <div class="v1_2">
+        <div class="v2_2"></div>
+        <div class="v2_3"></div>
+        <div class="v2_19"></div>
+        <div class="v2_8"></div><span class="v2_9">Welcome!</span><span class="v2_10">Have an Account?</span><span class="v4_13">Save your money!</span><span class="v4_10">Please fill out forms</span><span class="v2_12">ENTRAR</span>
+        <div class="v2_11"></div><a href="{% url 'login' %}" class="v2_13">Login</a>
+        <div class="v2_14"></div>
+        <div class="v2_15"></div>
+        <form method="POST" action="">
+            {% csrf_token %}
+            <div class="v2_16"></div>
+            <span class="v2_18">Register</span>
+            <input class="v2_18" type="submit">
 
-					<form method="POST" action="">
-                        {% csrf_token %}
-						<div class="input-group mb-3">
-							<div class="input-group-append">
-								<span class="input-group-text"><i class="fas fa-user"></i></span>
-							</div>
-                            {{form.username}}
-						</div>
-						<div class="input-group mb-2">
-							<div class="input-group-append">
-								<span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
-							</div>
-                            {{form.email}}
-						</div>
-						<div class="input-group mb-2">
-							<div class="input-group-append">
-								<span class="input-group-text"><i class="fas fa-key"></i></span>
-							</div>
-                            {{form.password1}}
-						</div>
-						<div class="input-group mb-2">
-							<div class="input-group-append">
-								<span class="input-group-text"><i class="fas fa-key"></i></span>
-							</div>
-                            {{form.password2}}
-						</div>
+            <!-- <span class="input-v2_20">Name</span> -->
+            <input type="text" name="username" maxlength="150" autofocus="" required="" id="id_username" placeholder="Username.." class="input-v2_20">
+            <!-- <span class="input-v2_21">Email</span> -->
+            <input type="text" name="email" maxlength="150" autofocus="" required="" id="id_email" placeholder="Email.." class="input-v2_21">
+            <!-- <span class="input-v2_22">Password</span> -->
+            <!-- {{form.password1}} -->
+            <input type="text" name="password" maxlength="150" autofocus="" required="" id="id_password" placeholder="Password.." class="input-v2_22">
+            <input type="text" name="password" maxlength="150" autofocus="" required="" id="id_password" placeholder="Password.." class="input-v2_23">
 
-				   		<div class="d-flex justify-content-center mt-3 login_container">
-				 			<input class="btn login_btn" type="submit" value="Register Account">
-				   		</div>
-					</form>
-				</div>
-                {{form.errors}}
-				<div class="mt-4">
-					<div class="d-flex justify-content-center links">
-						Already have an account? <a href="{% url 'login' %}" class="ml-2">Login</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<script>
-						/* Because i didnt set placeholder values in forms.py they will be set here using vanilla Javascript
-		//We start indexing at one because CSRF_token is considered and input field 
-		 */
-
-		//Query All input fields
-		var form_fields = document.getElementsByTagName('input')
-		form_fields[1].placeholder='Username..';
-		form_fields[2].placeholder='Email..';
-		form_fields[3].placeholder='Enter password...';
-		form_fields[4].placeholder='Re-enter Password...';
+            <div class="v4_4">
+                <div class="v4_5">
+                    <img src="{% static 'images/register/Vector_user.png' %}">
+                </div>
+            </div>
+            <div class="v4_6">
+                <div class="v4_7">
+                    <img src="{% static 'images/register/Vector_email.png' %}">
+                </div>
+            </div>
+            <div class="v4_8">
+                <div class="v4_9">
+                    <img src="{% static 'images/register/Vector_pass.png' %}">
+                </div>
+            </div>
+            <div class="v4_14">
+                <img src="{% static 'images/register/skambo.png' %}" alt="">
+            </div>
+            <div class="v4_15"></div>
+        </form>
+        <div class="warning">
+            {{form.errors}}
+        </div>
+    </div>
 
 
-		for (var field in form_fields){	
-			form_fields[field].className += ' form-control'
-		}
-	</script>
+    <script>
+        /* Because i didnt set placeholder values in forms.py they will be set here using vanilla Javascript
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                //We start indexing at one because CSRF_token is considered and input field 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+        //Query All input fields
+        // var form_fields = document.getElementsByTagName('input')
+        // form_fields[1].placeholder = 'Username..';
+        // form_fields[2].placeholder = 'Email..';
+        // form_fields[3].placeholder = 'Enter password...';
+        // form_fields[4].placeholder = 'Re-enter Password...';
+
+
+        // for (var field in form_fields) {
+        //     form_fields[field].className += ' form-control'
+        // }
+    </script>
 </body>
-</html>
 
-
-
+</html> <br/><br/>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-size: 14px;
+    }
+    
+    .warning {
+        /* width: 300px;
+        height: 50px;
+        background-color: grey;
+        color: #fff;
+        padding: 10px;
+        margin-top: 375px;
+        margin-left: 350px;
+        text-align: center; */
+        width: 500px;
+        height: 100px;
+        background: rgb(248, 248, 250);
+        opacity: 1;
+        position: absolute;
+        top: 725px;
+        left: 550px;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        overflow: hidden;
+        color: rgba(102, 115, 187, 1);
+        position: absolute;
+        font-family: Roboto;
+        font-weight: Bold;
+        font-size: 24px;
+        opacity: 1;
+        text-align: center;
+    }
+    
+    .v1_2 {
+        width: 100%;
+        height: 1024px;
+        background: rgba(255, 255, 255, 1);
+        opacity: 1;
+        position: relative;
+        top: 0px;
+        left: 0px;
+        overflow: hidden;
+    }
+    
+    .v2_2 {
+        width: 100%;
+        height: 100%;
+        background: rgba(226, 206, 26, 1);
+        opacity: 1;
+        position: relative;
+        top: 0px;
+        left: 0px;
+        overflow: hidden;
+    }
+    
+    .v2_3 {
+        width: 944px;
+        height: 555px;
+        background: rgba(254, 250, 161, 1);
+        opacity: 1;
+        position: absolute;
+        top: 238px;
+        left: 248px;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
+        box-shadow: 3px 4px 10px rgba(0, 0, 0, 0.25);
+        overflow: hidden;
+    }
+    
+    .v2_19 {
+        width: 232px;
+        height: 70px;
+        background: rgba(54, 50, 10, 1);
+        opacity: 1;
+        position: absolute;
+        top: 644px;
+        left: 765px;
+        border: 4px solid rgba(0, 0, 0, 1);
+        border-top-left-radius: 30px;
+        border-top-right-radius: 30px;
+        border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+        overflow: hidden;
+    }
+    
+    .v2_8 {
+        width: 304px;
+        height: 555px;
+        background: rgba(54, 49, 9, 1);
+        opacity: 1;
+        position: absolute;
+        top: 238px;
+        left: 248px;
+        border-top-left-radius: 16px;
+        border-bottom-left-radius: 16px;
+        overflow: hidden;
+    }
+    
+    .v2_9 {
+        width: 251px;
+        color: rgba(255, 255, 255, 1);
+        position: absolute;
+        top: 480px;
+        left: 330px;
+        font-family: Poppins;
+        font-weight: Bold;
+        font-size: 26px;
+        opacity: 1;
+        text-align: left;
+    }
+    
+    .v2_10 {
+        width: 215px;
+        color: rgba(255, 255, 255, 1);
+        position: absolute;
+        top: 559px;
+        left: 295px;
+        font-family: Poppins;
+        font-weight: Medium;
+        font-size: 23px;
+        opacity: 1;
+        text-align: left;
+    }
+    
+    .v4_13 {
+        width: 190px;
+        color: rgba(255, 255, 255, 1);
+        position: absolute;
+        top: 726px;
+        left: 323px;
+        font-family: Poppins;
+        font-weight: Medium;
+        font-size: 17px;
+        opacity: 1;
+        text-align: left;
+    }
+    
+    .v4_10 {
+        width: 224px;
+        color: rgba(0, 0, 0, 1);
+        position: absolute;
+        top: 275px;
+        left: 614px;
+        font-family: Poppins;
+        font-weight: Medium;
+        font-size: 19px;
+        opacity: 1;
+        text-align: left;
+    }
+    
+    .v2_12 {
+        width: 101px;
+        color: rgba(255, 255, 255, 1);
+        position: absolute;
+        top: 661px;
+        left: 357px;
+        font-family: Poppins;
+        font-weight: Bold;
+        font-size: 23px;
+        opacity: 1;
+        text-align: center;
+    }
+    
+    .v2_11 {
+        width: 232px;
+        height: 70px;
+        background: rgba(196, 196, 196, 1);
+        opacity: 1;
+        position: absolute;
+        top: 644px;
+        left: 283px;
+        border: 4px solid rgba(255, 255, 255, 1);
+        border-top-left-radius: 30px;
+        border-top-right-radius: 30px;
+        border-bottom-left-radius: 30px;
+        border-bottom-right-radius: 30px;
+        overflow: hidden;
+    }
+    
+    .v2_13 {
+        width: 296px;
+        color: rgb(8, 8, 8);
+        position: absolute;
+        top: 655px;
+        left: 251px;
+        font-family: Poppins;
+        font-weight: ExtraBold;
+        font-size: 32px;
+        opacity: 1;
+        text-align: center;
+    }
+    
+    .v2_14 {
+        width: 480px;
+        height: 60px;
+        background: rgb(253, 253, 251);
+        opacity: 1;
+        position: absolute;
+        top: 339px;
+        left: 632px;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        overflow: hidden;
+    }
+    
+    .v2_15 {
+        width: 480px;
+        height: 60px;
+        background: rgb(255, 255, 253);
+        opacity: 1;
+        position: absolute;
+        top: 421px;
+        left: 632px;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        overflow: hidden;
+    }
+    
+    .v2_16 {
+        width: 480px;
+        height: 60px;
+        background: rgb(253, 253, 253);
+        opacity: 1;
+        position: absolute;
+        top: 503px;
+        left: 632px;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        overflow: hidden;
+    }
+    
+    .v2_18 {
+        width: 167px;
+        color: rgb(8, 0, 0);
+        position: absolute;
+        top: 662px;
+        left: 795px;
+        font-family: Poppins;
+        font-weight: Bold;
+        font-size: 23px;
+        opacity: 1;
+        text-align: center;
+    }
+    
+    .input-v2_20 {
+        width: 350px;
+        color: rgba(226, 206, 26, 1);
+        position: absolute;
+        top: 350px;
+        left: 700px;
+        font-family: Poppins;
+        font-weight: Bold;
+        font-size: 23px;
+        opacity: 1;
+        text-align: center;
+    }
+    
+    .input-v2_21 {
+        width: 350px;
+        color: rgba(226, 206, 26, 1);
+        position: absolute;
+        top: 437px;
+        left: 700px;
+        font-family: Poppins;
+        font-weight: Bold;
+        font-size: 23px;
+        opacity: 1;
+        text-align: center;
+    }
+    
+    .input-v2_22 {
+        width: 350px;
+        color: rgba(226, 206, 26, 1);
+        position: absolute;
+        top: 524px;
+        left: 700px;
+        font-family: Poppins;
+        font-weight: Bold;
+        font-size: 23px;
+        opacity: 1;
+        text-align: center;
+    }
+    
+    .input-v2_23 {
+        width: 350px;
+        color: rgba(226, 206, 26, 1);
+        position: absolute;
+        top: 611px;
+        left: 700px;
+        font-family: Poppins;
+        font-weight: Bold;
+        font-size: 23px;
+        opacity: 1;
+        text-align: center;
+    }
+    
+    .v4_4 {
+        width: 20px;
+        height: 20px;
+        background: rgba(226, 206, 26, 1);
+        opacity: 1;
+        position: absolute;
+        top: 360px;
+        left: 661px;
+        overflow: hidden;
+    }
+    
+    .v4_5 {
+        width: 14px;
+        height: 16px;
+        background: rgba(226, 206, 26, 1);
+        opacity: 1;
+        position: absolute;
+        top: 1px;
+        left: 2px;
+    }
+    
+    .v4_6 {
+        width: 20px;
+        height: 20px;
+        background: rgba(226, 206, 26, 1);
+        opacity: 1;
+        position: absolute;
+        top: 486px;
+        left: 661px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        overflow: hidden;
+    }
+    
+    .v4_7 {
+        width: 17px;
+        height: 12px;
+        background: rgba(226, 206, 26, 1);
+        opacity: 1;
+        position: absolute;
+        top: 0px;
+        left: -3px;
+    }
+    
+    .v4_8 {
+        width: 20px;
+        height: 20px;
+        background: rgba(226, 206, 26, 1);
+        opacity: 1;
+        position: absolute;
+        top: 570px;
+        left: 662px;
+        overflow: hidden;
+    }
+    
+    .v4_9 {
+        width: 15px;
+        height: 17px;
+        background: rgba(226, 206, 26, 1);
+        opacity: 1;
+        position: absolute;
+        top: 0px;
+        left: -1px;
+    }
+    
+    .v4_14 {
+        width: 157px;
+        height: 91px;
+        background: url("../images/v4_14.png");
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+        opacity: 1;
+        position: absolute;
+        top: 330px;
+        left: 322px;
+        overflow: hidden;
+    }
+    
+    .v4_15 {
+        width: 135px;
+        height: 5px;
+        background: rgba(196, 196, 196, 1);
+        opacity: 1;
+        position: absolute;
+        top: 517px;
+        left: 330px;
+        overflow: hidden;
+    }
+</style>

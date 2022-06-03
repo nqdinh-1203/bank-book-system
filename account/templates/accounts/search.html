@@ -1,0 +1,99 @@
+{% extends 'accounts/main.html'%}
+{% load static %}
+{% block content %}
+
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+<br>
+
+<div class="row">
+	<div class="col">
+		<div class="card card-body">
+			<form method="get">
+				{{myFilter.form.as_p}}
+			
+		    <button class="btn btn-primary" type="submit">Search</button>
+		  </form>
+		</div>
+	</div>
+	
+</div>
+<br>
+
+<h1>Kết quả tra cứu</h1>
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+					<th>STT</th>
+					<th>Mã sổ</th>
+					<th>Loại tiết kiệm</th>
+					<th>Khách hàng</th>
+					<th>Số dư</th>
+				</tr>
+				
+				{% for bankbook in bankbookres%}
+					<tr>
+                        <td>{{forloop.counter}}</td>
+						<td>{{bankbook.bookid}}</td>
+						<td>{{bankbook.types.name}}</td>
+						<td>{{bankbook.customer_name}}</td>
+						<td>{{bankbook.balance}}</td>
+					</tr>
+				{% endfor %}
+
+			</table>
+		</div>
+	</div>
+</div>
+<div></div>
+<div></div>
+
+<br>
+<h1>Danh sách sổ hiện có</h1>
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+					<th>STT</th>
+					<th>Mã sổ</th>
+					<th>Ngày tạo</th>
+					<th>Loại tiết kiệm</th>
+					<th>Khách hàng</th>
+                    <th>CMND/CCCD</th>
+                    <th>Số dư</th>
+					<th>Sổ đã đóng</th>
+				</tr>
+				
+				{% for bankbook in bankbooks%}
+					<tr>
+                        <td>{{forloop.counter}}</td>
+						<td>{{bankbook.bookid}}</td>
+						<td>{{bankbook.date_created}}</td>
+						<td>{{bankbook.types.name}}</td>
+						<td>{{bankbook.customer_name}}</td>
+                        <td>{{bankbook.identityid}}</td>
+                        <td>{{bankbook.balance}}</td>
+						<td>{{bankbook.is_delete}}</td>
+					</tr>
+				{% endfor %}
+
+			</table>
+		</div>
+	</div>
+</div>
+
+<style>
+h1 {
+    height:50px;
+    width:500px;
+    margin: 0 auto;
+    text-align: center;
+}
+</style>
+{% endblock content %}
+

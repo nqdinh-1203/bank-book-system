@@ -1,0 +1,28 @@
+{% extends 'accounts/main.html'%}
+{% load static %}
+{% block content %}
+
+
+<div class="row">
+    <div class="col_md_6">
+        <div class="card card-body">
+            <form action="" method="POST">
+                {% csrf_token %} <!--Send data carefully -->
+                    <!-- {{form}} -->
+                    <table>
+                        {{ form.as_p }}
+                      </table>
+
+                    <hr> 
+                {% for message in messages %}
+                    <p id="messages">{{message}}</p>
+                {% endfor %}
+
+
+                <input type = "submit" name="Submit">
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
