@@ -74,3 +74,11 @@ class Search(django_filters.FilterSet):
         model = BankBookkk
         fields = '__all__'
         exclude = ['firstdeposit','balance','date_created']
+
+class BookFilter(django_filters.FilterSet):
+    date = DateFilter(field_name="date_created", label=('Từ ngày:'),
+                    lookup_expr='gte',
+                    widget=forms.widgets.DateInput(attrs={'type': 'date'}))
+    class Meta:
+        model = BankBookkk
+        fields = ['bookid', 'types']

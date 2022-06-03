@@ -103,10 +103,19 @@
             </div>
 
             <span class="v1_94">Rút tiền</span><span class="v1_95">Sổ tiết kiệm hiện có</span><span class="v1_96">Filter</span>
-            <div class="v1_97"><span class="v1_98">Type</span>
-                <div class="v1_99">
-                    <div class="v1_100"></div>
-                </div>
+            <div class="v1_97">
+                <form method="get">
+                    <span id="filter">Mã sổ:</span>
+                    {{myFilter.form.bookid}}
+
+                    <span id="filter">Loại tiết kiệm:</span>
+                    {{myFilter.form.types}}
+
+                    <span id="filter">Từ ngày:</span>
+                    {{myFilter.form.date}}
+
+                    <button class="btn btn-primary" type="submit">Filter</button>
+                </form>
             </div>
             <div class="v110_285">
                 <div class="v110_286">
@@ -121,7 +130,7 @@
                 <div class="v1_109">
                     <div class="v1_110">
                         <div class="v1_111"><span class="v1_112">Debit</span></div><span class="v1_113">11/20/20</span><span class="v1_114">Current Account</span><span class="v1_115">Sub Box Restaurant</span><span class="v1_116">70 GHC</span></div>
-                    <div class="v1_117">
+                    <div class="v1_117">md
                         <div class="v1_118"><span class="v1_119">Debit</span></div><span class="v1_120">Palace Supermarket</span><span class="v1_121">Current Account</span><span class="v1_122">250 GHC</span><span class="v1_123">9/27/20</span>
                         <div class="v1_124"></div>
                     </div>
@@ -201,12 +210,15 @@
 
         <span class="v109_277">Ngày rút *</span>
         <span class="v109_278">Số tiền rút *</span>
-        <span class="v109_280">Quy định về việc rút tiền</span>
+        <a href="" class="v109_280" onclick="notice()">Quy định về việc rút tiền</a>
 
     </div>
 </body>
 <script>
     document.getElementById('e').value = new Date().toISOString().substring(0, 10);
+    function notice() {
+        alert("- Chỉ được rút sau khi mở sổ ít nhất 15 ngày.\n- Loại tiết kiệm có kỳ hạn chỉ đưọc rút khi quá kỳ hạn và phải rút hết toàn bộ.\n- Tiền lãi = số lần đáo hạn * lãi suất * kỳ hạn ( 0.5% với kỳ hạn 3 tháng, 0.55% với kỳ hạn 6 tháng).\n- Loại tiết kiệm không kỳ hạn có thề rút với số tiền <= số dư hiện có.\n- Tiền lãi chỉ tính khi gởi ít nhất 1 tháng với lãi suất 0.15%.\n- Sổ sau khi rút hết tiền sẽ tự dộng đóng.");
+    }
 </script>
 
 </html> <br/><br/>
@@ -221,6 +233,29 @@
     
     body {
         font-size: 14px;
+    }
+
+    .btn.btn-primary {
+        margin-left: 20px;
+    }
+
+    #filter {
+        font-family: Quicksand;
+        text-align: left;
+        font-size: 16px;
+    }
+
+    #id_bookid {
+        width: 70px;
+        height: 25px;
+    }
+
+    #id_types {
+        height: 25px;
+    }
+
+    #id_date{
+        height: 25px;
     }
     
     .my-custom-scrollbar {
@@ -847,19 +882,13 @@
     }
     
     .v1_97 {
-        width: 94px;
+        width: 1000px;
         height: 29px;
-        background: rgba(35, 102, 181, 1);
         margin: 10px;
         opacity: 1;
         position: absolute;
-        top: 547px;
+        top: 537px;
         left: 398px;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-        border-bottom-left-radius: 3px;
-        border-bottom-right-radius: 3px;
-        overflow: hidden;
     }
     
     .v1_98 {

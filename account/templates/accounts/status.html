@@ -53,10 +53,19 @@
     <span class="v1_15">{{delivered}}</span>
 </div>
 <span class="v1_16">Filter By</span>
-<div class="v1_17"><span class="v1_18">Type</span>
-    <div class="v1_19">
-        <div class="v1_20"></div>
-    </div>
+<div class="v1_17">
+    <form method="get">
+        <span id="filter">Mã sổ:</span>
+        {{myFilter.form.bookid}}
+
+        <span id="filter">Loại tiết kiệm:</span>
+        {{myFilter.form.types}}
+
+        <span id="filter">Từ ngày:</span>
+        {{myFilter.form.date}}
+
+        <button class="btn btn-primary" type="submit">Filter</button>
+    </form>
 </div>
 <div class="v1_21">
     <div class="v1_22"></div><span class="v1_23">Book available</span>
@@ -109,6 +118,29 @@
     
     body {
         font-size: 14px;
+    }
+
+    .btn.btn-primary {
+        margin-left: 20px;
+    }
+
+    #filter {
+        font-family: Quicksand;
+        text-align: left;
+        font-size: 16px;
+    }
+
+    #id_bookid {
+        width: 70px;
+        height: 25px;
+    }
+
+    #id_types {
+        height: 25px;
+    }
+
+    #id_date{
+        height: 25px;
     }
     
     .my-custom-scrollbar {
@@ -296,19 +328,13 @@
     }
     
     .v1_17 {
-        width: 94px;
+        width: 1000px;
         height: 29px;
-        background: rgba(35, 102, 181, 1);
         margin: 10px;
         opacity: 1;
         position: absolute;
-        top: 547px;
+        top: 537px;
         left: 398px;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-        border-bottom-left-radius: 3px;
-        border-bottom-right-radius: 3px;
-        overflow: hidden;
     }
     
     .v1_18 {

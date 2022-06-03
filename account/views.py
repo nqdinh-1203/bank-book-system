@@ -18,7 +18,7 @@ from account.decorators import unauthenticated_user
 # Create your views here.
 from .models import *
 from .forms import  OrderForm, CreateUserForm,CustomerForm,DepositForm,WithdrawForm
-from .filters import OrderFilter,MonthlyFilter,DailyFilter,Search
+from .filters import *
 from .decorators import unauthenticated_user,allowed_users,admin_only
 
 @unauthenticated_user
@@ -93,8 +93,11 @@ def userPage(request):
     print('ORDERS:',orders)
     print('BANKBOOKS:',bankbooks)
     
+    myFilter = BookFilter(request.GET, queryset=bankbooks)
+    bankbooks= myFilter.qs
+    
     context = {'orders':orders,'total_bankbooks':total_bankbooks,
-    'delivered':delivered,'pending':total_bankbooks-delivered,'bankbooks':bankbooks}
+    'delivered':delivered,'pending':total_bankbooks-delivered,'bankbooks':bankbooks, 'myFilter':myFilter}
     return render(request, 'accounts/user.html',context)
 
 @login_required(login_url='login')
@@ -212,9 +215,10 @@ def createOrder(request,pk):
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['customer'])
 def depositMoney(request):
-
     customer = request.user.customer
     form = DepositForm(instance=customer)
+    myFilter = None
+    bankbooks =  request.user.customer.bankbookkk_set.all().filter(is_delete=False)
     if request.method == 'POST':
         form = DepositForm(request.POST,instance=customer)
         if form.is_valid():
@@ -246,8 +250,11 @@ def depositMoney(request):
                     return redirect('/')
             else:
                 messages.info(request, 'Chỉ nhận gởi tiền với loại tiết kiệm không kỳ hạn.')
+    else:
+        myFilter = BookFilter(request.GET, queryset=bankbooks)
+        bankbooks= myFilter.qs
 
-    context = {'form':form}
+    context = {'form':form, 'bankbooks':bankbooks, 'myFilter':myFilter}
     return render(request, 'accounts/deposit_form.html',context)
 
 @login_required(login_url='login')
@@ -370,7 +377,11 @@ def checkout(request):
                         return redirect('/')
             else:
                 messages.info(request, 'Sổ phải mở ít nhất 15 ngày.')
-    context = {'form':form,'bankbooks': bankbooks}
+    else:
+        myFilter = BookFilter(request.GET, queryset=bankbooks)
+        bankbooks= myFilter.qs
+        
+    context = {'form':form,'bankbooks': bankbooks, 'myFilter':myFilter}
     return render(request, 'accounts/checkout.html', context)
 
 
