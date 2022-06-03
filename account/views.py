@@ -64,20 +64,19 @@ def logoutUser(request):
 @login_required(login_url='login')
 @admin_only
 def home(request):
-    orders = Orders.objects.all() 
     customers = Customer.objects.all()
-    bankbooks =  BankBookkk.objects.all()
-
+    bankbooks = BankBookkk.objects.all().filter(is_delete=False)
+    transactions = Transaction.objects.all()
     total_customers = customers.count()
-
     total_bankbooks = bankbooks.count()
-    delivered = orders.filter(status='Delivered').count()
-    pending = orders.filter(status='Pending').count()
+    total_transactions = transactions.count()
 
-    # print('Douma', total_bankbooks)
-    context = {'orders':orders, 'customers': customers,
-    'total_customers':total_customers,'total_bankbooks':15,
-    'delivered':delivered,'pending':pending}
+    myFilter = BookFilter(request.GET, queryset=bankbooks)
+    bankbooks= myFilter.qs
+
+    context = {'bankbooks':bankbooks, 'customers': customers, 'transactions':transactions,
+    'total_customers':total_customers,'total_bankbooks':total_bankbooks,
+    'total_transactions':total_transactions, 'myFilter':myFilter}
     return render(request, 'accounts/dashboard.html',context)
 
 @login_required(login_url='login')
@@ -85,19 +84,17 @@ def home(request):
 def userPage(request):
     orders = request.user.customer.orders_set.all()
     bankbooks =  request.user.customer.bankbookkk_set.all().filter(is_delete=False)
-    bankbooks_del =  request.user.customer.bankbookkk_set.all().filter(is_delete=True)
+    bankbooks_all =  request.user.customer.bankbookkk_set.all().count()
+    bankbooks_del =  request.user.customer.bankbookkk_set.all().filter(is_delete=True).count()
     
     total_bankbooks = bankbooks.count()
-    delivered = bankbooks_del.count()
-    pending = orders.filter(status='Pending').count()
-    print('ORDERS:',orders)
-    print('BANKBOOKS:',bankbooks)
+
     
     myFilter = BookFilter(request.GET, queryset=bankbooks)
     bankbooks= myFilter.qs
     
     context = {'orders':orders,'total_bankbooks':total_bankbooks,
-    'delivered':delivered,'pending':total_bankbooks-delivered,'bankbooks':bankbooks, 'myFilter':myFilter}
+    'bankbooks':bankbooks,'bankbooks_del':bankbooks_del,'bankbooks_all':bankbooks_all, 'myFilter':myFilter}
     return render(request, 'accounts/user.html',context)
 
 @login_required(login_url='login')
@@ -393,11 +390,11 @@ def search1(request):
     bankbooks =  request.user.customer.bankbookkk_set.all()
     myFilter = Search(request.GET, queryset=bankbooks)
     bankbookres= myFilter.qs
-    
-    context = {'bankbooks':bankbooks,'bankbookres':bankbookres,'myFilter':myFilter}
+    customer =  request.user.customer
+    context = {'bankbooks':bankbooks,'bankbookres':bankbookres,'myFilter':myFilter,'customer':customer}
 
 
-    return render(request,'accounts/search.html',context)
+    return render(request,'accounts/search1.html',context)
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
@@ -408,9 +405,7 @@ def search2(request):
     bankbookres= myFilter.qs
     
     context = {'bankbooks':bankbooks,'bankbookres':bankbookres,'myFilter':myFilter}
-
-
-    return render(request,'accounts/search.html',context)
+    return render(request,'accounts/search2.html',context)
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
@@ -439,9 +434,9 @@ def createMonthlyReport(request):
     from django.db.models import Q
     results = transactionres.extra(select={'day': 'date(timestamp)'})\
                             .values('day')\
-                            .annotate(open=Count('bankbookkk__bookid',distinct=True),
+                            .annotate(open=Count('bankbookkk__bookid',distinct=True,only=Q(bankbookkk__is_delete=False)),
                                     closed=Count('bankbookkk__is_delete',only=Q(bankbookkk__is_delete=True)),
-                                    diff=Count('bankbookkk__bookid',distinct=True)-Count('bankbookkk__is_delete',only=Q(bankbookkk__is_delete=True))
+                                    diff=Count('bankbookkk__bookid',distinct=True,only=Q(bankbookkk__is_delete=False))-Count('bankbookkk__is_delete',only=Q(bankbookkk__is_delete=True))
                                     )
     
 

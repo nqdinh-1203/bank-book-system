@@ -14,9 +14,9 @@ from .constant import TRANSACTION_TYPE_CHOICES
 # Create your models here.
 class Customer(models.Model):
     user = models.OneToOneField(User,null=True,blank=True,on_delete=models.CASCADE)
-    name = models.CharField(max_length=200, null=True)
-    phone = models.CharField(max_length=200, null=True)
-    email = models.CharField(max_length=200, null=True)
+    name = models.CharField(max_length=200, null=True,verbose_name='Tên khách hàng')
+    phone = models.CharField(max_length=200, null=True,verbose_name='Số điện thoại khách hàng')
+    email = models.CharField(max_length=200, null=True,verbose_name='Email khách hàng')
     profile_pic = models.ImageField(default="logo2.png",null=True,blank=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
 

@@ -1939,7 +1939,7 @@
                     <button type="button" class="abcd"><a href="{% url 'user-page' %}"
                             style="text-decoration: none; color: #fff;">Hủy</a></button>
                     <input type="submit" name="submit" value="Xác nhận"><br>
-                    <a href="#" style="color:red;">Quy định về việc mở sổ</a>
+                    <a href="#" style="color:red;" onclick="notice()">Quy định về việc mở sổ</a>
                 </form>
             </div>
         </div>
@@ -2018,5 +2018,10 @@
     </div>
 
 </body>
-
+<script>
+    document.getElementById('e').value = new Date().toISOString().substring(0, 10);
+    function notice() {
+        alert("- Có 3 loại tiết kiệm ( không kỳ hạn, 3 tháng, 6 tháng ).\n-Số tiền gởi tối thiểu là 100.000.");
+    }
+</script>
 </html>
