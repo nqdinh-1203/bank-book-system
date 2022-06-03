@@ -71,6 +71,7 @@ DATABASES =
 }
 	- python manage.py migrate
 <blockquote>
+</details>
 
 ## Lưu các tệp (hình ảnh, html, css) ở AWS S3 Buckets thay vì lưu ở local
 <details><summary>Click to expand</summary>
@@ -84,6 +85,7 @@ DATABASES =
 - Lúc này khi muốn cập nhật các file ở local đến AWS thì ta chạy dòng lệnh python manage.py collectstatic 
 - Lưu ý rằng khi kết nối từ local lên AWS thì các dữ liệu cũ sẽ đều bị reset nên ta sẽ phải chạy lệnh python manage.py createsuperuser để tạo superuser mới.
 <blockquote>
+</details>
 
 ## Deploy lên Heroku Server
 
@@ -112,7 +114,7 @@ DATABASES =
 	- Lúc này ta đã push toàn bộ nội dung của ứng dụng lên Heroku, chạy câu lệnh *heroku run python manage.py migrate* để thực hiện kết nối 
 
 <blockquote>
-
+</details>
 ## Cuối cùng kết nối Heroku với Postgres 
 <details><summary>Click to expand</summary>
 
@@ -131,6 +133,7 @@ DATABASES =
 		- DB Name là tên của database
 	- Lưu ý, để liên kết với database trong AWS thì ta cần điều chỉnh mục Inbound Rules của database (xem [video](https://www.youtube.com/watch?v=TFFtDLZnbSs&list=PL-51WBLyFTg2vW-_6XBoUpE7vpmoR3ztO&index=25) từ phút 9:40)
 <blockquote>
+</details>
 
 ## Đường dẫn tới project trên Heroku
 Link Heroku: https://theblues-crm1.herokuapp.com/ 
