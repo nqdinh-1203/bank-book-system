@@ -47,7 +47,7 @@
                     </div>
                 <div class=ei109_171_1_395>
                     <div class="ei109_171_1_396"></div>
-                    <a class="ei109_171_1_397" href="{% url 'logout' %}">Đăng xuẩt</a>
+                    <a class="ei109_171_1_397" href="{% url 'logout' %}">Đăng xuất</a>
                     <div class=ei109_171_1_398>
                         <div class=ei109_171_1_399>
                             <div class="ei109_171_1_400"></div>
@@ -144,6 +144,35 @@
 
 </html> <br/><br/>
 <style>
+    option{
+        font-weight: bold;
+    }
+    input[type=date] {
+        width: 300px;
+        height: 45px;
+        border: none;
+        color: red;
+        font-weight: bold;
+    }
+    select{
+        height: 45px;
+        color: red;
+        width: 300px;
+        font-weight: bold;
+        border: none;
+    }
+    th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #127afa;
+        color: white;
+        text-align: center;
+    }
+
+    tr {
+        text-align: center;
+    }
     * {
         box-sizing: border-box;
     }
@@ -538,7 +567,7 @@
         width: 122px;
         height: 29px;
         position: absolute;
-        left: 43px;
+        left: -16px;
         top: 905px;
         border-top-left-radius: 100px;
         border-top-right-radius: 100px;
@@ -699,33 +728,27 @@
     }
     
     .v109_276 {
-        width: 150px;
-        height: 34px;
+        width: 300px;
+        height: 45px;
         background: rgba(255, 255, 255, 1);
         opacity: 1;
         position: absolute;
         top: 219px;
         left: 945px;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-        border-bottom-left-radius: 3px;
-        border-bottom-right-radius: 3px;
+        border-radius: 5px;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15000000596046448);
         overflow: hidden;
     }
     
     .v109_279 {
-        width: 150px;
-        height: 34px;
+        width: 300px;
+        height: 45px;
         background: rgba(255, 255, 255, 1);
         opacity: 1;
         position: absolute;
         top: 297px;
         left: 448px;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-        border-bottom-left-radius: 3px;
-        border-bottom-right-radius: 3px;
+        border-radius: 5px;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15000000596046448);
         overflow: hidden;
     }
@@ -872,7 +895,7 @@
     }
     
     .v1_102 {
-        width: 1010px;
+        width: 1300px;
         height: 349px;
         background: url("../images/v1_102.png");
         background-repeat: no-repeat;
@@ -886,7 +909,7 @@
     }
     
     .v1_103 {
-        width: 1010px;
+        width: 1190px;
         height: 349px;
         background: rgba(255, 255, 255, 1);
         opacity: 1;
@@ -1640,6 +1663,7 @@
         font-size: 15px;
         opacity: 1;
         text-align: left;
+        font-weight: bold;
     }
     
     .v109_265 {
@@ -1653,6 +1677,7 @@
         font-size: 15px;
         opacity: 1;
         text-align: left;
+        font-weight: bold;
     }
     
     .v109_266 {
@@ -1720,6 +1745,7 @@
         font-size: 14px;
         opacity: 1;
         text-align: left;
+        font-weight: bold;
     }
     
     .v109_271 {
@@ -1751,7 +1777,7 @@
     .v109_273 {
         width: 80px;
         height: 26px;
-        background: rgba(49, 130, 206, 1);
+        background:  #127afa;
         opacity: 1;
         position: absolute;
         top: 400px;
@@ -1761,12 +1787,13 @@
         border-bottom-left-radius: 3px;
         border-bottom-right-radius: 3px;
         overflow: hidden;
+        font-weight: bold;
     }
     
     #submit {
         width: 80px;
         height: 26px;
-        background: rgba(49, 130, 206, 1);
+        background:  #127afa;
         opacity: 1;
         position: absolute;
         border-top-left-radius: 3px;
@@ -1795,17 +1822,14 @@
     }
     
     .v109_275 {
-        width: 150px;
-        height: 34px;
+        width: 300px;
+        height: 45px;
         background: rgba(255, 255, 255, 1);
         opacity: 1;
         position: absolute;
         top: 221px;
         left: 447px;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-        border-bottom-left-radius: 3px;
-        border-bottom-right-radius: 3px;
+        border-radius: 5px;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15000000596046448);
         overflow: hidden;
     }
@@ -1851,6 +1875,7 @@
         font-size: 15px;
         opacity: 1;
         text-align: left;
+        font-weight: bold;
     }
     
     .v109_278 {
@@ -1864,6 +1889,7 @@
         font-size: 15px;
         opacity: 1;
         text-align: left;
+        font-weight: bold;
     }
     
     .v109_280 {
@@ -1893,17 +1919,14 @@
     }
     
     .v109_283 {
-        width: 150px;
-        height: 34px;
+        width: 300px;
+        height: 45px;
         background: rgba(255, 255, 255, 1);
         opacity: 1;
         position: absolute;
         top: 295px;
         left: 946px;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-        border-bottom-left-radius: 3px;
-        border-bottom-right-radius: 3px;
+        border-radius: 5px;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15000000596046448);
         overflow: hidden;
     }
