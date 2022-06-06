@@ -3,6 +3,7 @@
 <html>
 
 <head>
+    <title>Báo cáo ngày</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -24,17 +25,14 @@
                 <div class=ei109_171_1_359>
                     <img src="{% static 'images/Group.png' %}" class=img>
                     <div class=ei109_171_1_360>
-                        <!-- <span class="ei109_171_1_362">Trang chủ</span></div> -->
                         <a class="ei109_171_1_362" href="{% url 'home' %}">Trang chủ</a>
                     </div>
 
                     <div class=ei109_171_1_363>
-                        <!-- <span class="ei109_171_1_368">Tài khoản</span> -->
                         <a class="ei109_171_1_368" href="{% url 'search2' %}">Tra cứu sổ</a>
                     </div>
                     <div class=ei109_171_1_369>
                         <div class=ei109_171_1_370>
-                            <!-- </div><span class="ei109_171_1_373">Rút tiền</span></div> -->
                             <a class="ei109_171_1_373" href="{% url 'daily' %}">Báo cáo ngày</a>
                         </div>
                     </div>
@@ -42,7 +40,6 @@
                         <div class=ei109_171_1_375>
 
                         </div>
-                        <!-- <span class="ei109_171_1_379">Gửi tiền </span> -->
                         <a class="ei109_171_1_379" href="{% url 'monthly' %}">Báo cáo tháng</a>
 
                     </div>
@@ -375,7 +372,7 @@
         height: 23px;
         position: absolute;
         left: -10px;
-        top: 306px;
+        top: 300px;
         font-family: Quicksand;
         text-align: left;
         font-size: 18px;
@@ -387,7 +384,7 @@
         height: 23.199996948242188px;
         position: absolute;
         left: 0px;
-        top: 237px;
+        top: 250px;
     }
 
     .ei109_171_1_375 {
@@ -431,7 +428,7 @@
         height: 23px;
         position: absolute;
         left: -10px;
-        top: 140px;
+        top: 125px;
         font-family: Quicksand;
         text-align: left;
         font-size: 18px;

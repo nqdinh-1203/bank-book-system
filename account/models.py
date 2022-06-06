@@ -113,8 +113,11 @@ class BankBookkk(models.Model):
     
     def save(self, *args, **kwargs):
         if self.balance == -1:
+            print(self.firstdeposit)
             self.balance = self.firstdeposit
             self.firstdeposit = 0
+            print(self.balance)
+            print(self.firstdeposit)
         super(BankBookkk, self).save(*args, **kwargs)
 
     def __str__(self):

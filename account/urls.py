@@ -17,11 +17,11 @@ urlpatterns = [
     path('search2/',views.search2,name='search2'),
     path('daily/',views.createDailyReport,name='daily'),
     path('monthly/',views.createMonthlyReport,name='monthly'),
-    path('products/', views.products,name='products'),
-    path('customer/<str:pk_test>/', views.customer,name='customer'),
-    path('create_order/<str:pk>',views.createOrder,name='create_order'),
-    path('update_order/<str:pk>',views.updateOrder,name='update_order'),
-    path('delete_order/<str:pk>',views.deleteOrder,name='delete_order'),
+    # path('products/', views.products,name='products'),
+    # path('customer/<str:pk_test>/', views.customer,name='customer'),
+    # path('create_order/<str:pk>',views.createOrder,name='create_order'),
+    # path('update_order/<str:pk>',views.updateOrder,name='update_order'),
+    # path('delete_order/<str:pk>',views.deleteOrder,name='delete_order'),
     
 
     path('reset_password/',

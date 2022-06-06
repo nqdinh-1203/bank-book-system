@@ -27,67 +27,44 @@
                     <img src="{% static 'images/Group.png' %}" class=img>
                     {% if request.user.is_staff %}
                     <div class=ei109_171_1_360>
-                        <!-- <span class="ei109_171_1_362">Trang chủ</span></div> -->
                         <a class="ei109_171_1_362" href="{% url 'home' %}">Trang chủ</a>
                     </div>
                     
                     <div class=ei109_171_1_363>
-                        <!-- <span class="ei109_171_1_368">Tài khoản</span> -->
                         <a class="ei109_171_1_368" href="{% url 'search2' %}">Tra cứu sổ</a>
                     </div>
                     <div class=ei109_171_1_369>
-                        <div class=ei109_171_1_370>
-                            <!-- </div><span class="ei109_171_1_373">Rút tiền</span></div> -->
                             <a class="ei109_171_1_373" href="{% url 'daily' %}">Báo cáo ngày</a>
-                        </div>
                     </div>
                     <div class=ei109_171_1_374>
-                        <div class=ei109_171_1_375>
-        
-                        </div>
-                        <!-- <span class="ei109_171_1_379">Gửi tiền </span> -->
+
                         <a class="ei109_171_1_379" href="{% url 'monthly' %}">Báo cáo tháng</a>
         
                     </div>
                     {% else %}
                     <div class=ei109_171_1_360>
-                        <!-- <span class="ei109_171_1_362">Trang chủ</span> -->
                         <a class="ei109_171_1_362" href="{% url 'home' %}">Trang chủ</a>
                     </div>
                     <div class=ei109_171_1_363>
-                        <!-- <span class="ei109_171_1_368">Tài khoản</span> -->
                         <a class="ei109_171_1_368" href="{% url 'create_bankbook' %}">Mở sổ</a>
                     </div>
                     <div class=ei109_171_1_369>
-                        <div class=ei109_171_1_370>
-                        </div>
-                        <!-- <span class="ei109_171_1_373">Rút tiền</span> -->
+
                         <a class="ei109_171_1_373" href="{% url 'checkout' %}">Rút tiền</a>
                     </div>
+                    
                     <div class=ei109_171_1_374>
-                        <div class=ei109_171_1_375>
-
-                        </div>
-                        <!-- <span class="ei109_171_1_379">Gửi tiền </span> -->
                         <a class="ei109_171_1_379" href="{% url 'deposit' %}">Gửi tiền</a>
                     </div>
                     <div class=ei109_171_1_380>
-                        <div class=ei109_171_1_381>
-                        </div>
-                        <!-- <span class="ei109_171_1_384">Số dư</span> -->
                         <a class="ei109_171_1_384" href="{% url 'account' %}">Tài khoản</a>
                     </div>
                     <div class=ei109_171_1_385>
-                        <!-- <span class="ei109_171_1_389">     Tra cứu</span> -->
                         <a class="ei109_171_1_389" href="{% url 'search1' %}">Tra cứu</a>
                     </div>
                 </div>
                 
-                <div class=ei109_171_1_390>
-                    <div class=ei109_171_1_391>
-                        <div class="ei109_171_1_392"></div>
-                        <div class="ei109_171_1_393"></div>
-                    </div><span class="ei109_171_1_394">Hồ sơ</span></div>
+
                 {% endif %}
                 <div class=ei109_171_1_395>
                     <div class="ei109_171_1_396"></div>
@@ -339,16 +316,10 @@
         height: 23.199996948242188px;
         position: absolute;
         left: 0px;
-        top: 237px;
+        top: 400px;
     }
     
-    .ei109_171_1_375 {
-        width: 16.571428298950195px;
-        height: 23.199996948242188px;
-        position: absolute;
-        left: 0px;
-        top: 0px;
-    }
+
     
     .ei109_171_1_376 {
         background-color: rgba(255, 255, 255, 1);
@@ -383,7 +354,7 @@
         height: 23px;
         position: absolute;
         left: -10px;
-        top: 140px;
+        top: -25px;
         font-family: Quicksand;
         text-align: left;
         font-size: 18px;
@@ -395,7 +366,7 @@
         height: 23px;
         position: absolute;
         left: 0px;
-        top: 316.20001220703125px;
+        top: 450px;
     }
     
     .ei109_171_1_381 {
@@ -430,7 +401,7 @@
         height: 23px;
         position: absolute;
         left: -10px;
-        top: 125px;
+        top: -10px;
         font-family: Quicksand;
         text-align: left;
         font-size: 18px;

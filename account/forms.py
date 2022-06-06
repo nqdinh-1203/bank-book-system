@@ -5,9 +5,14 @@ from django.contrib.auth.models import User
 from django import forms
 from django.conf import settings
 from django.db.models import Q
+from django.forms import BaseFormSet
 
 
-
+class RequiredFormSet(BaseFormSet):
+    def __init__(self, *args, **kwargs):
+        super(RequiredFormSet, self).__init__(*args, **kwargs)
+        for form in self.forms:
+            form.empty_permitted = False
 
 class CustomerForm(ModelForm):
     class Meta:
@@ -20,7 +25,13 @@ class OrderForm(ModelForm):
         model = Orders
         fields = '__all__'
 
-
+class BankBookForm(ModelForm):
+    class Meta:
+        model = BankBookkk
+        fields = [
+            'types','customer_name','identityid',
+            'customer_address','firstdeposit'
+        ]
 
 class DepositForm(ModelForm):
     class Meta:

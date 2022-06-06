@@ -3,6 +3,7 @@
 <html>
 
 <head>
+    <title>Tra cứu sổ</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <link href="https://fonts.googleapis.com/css?family=Quicksand&display=swap" rel="stylesheet" />
@@ -54,11 +55,7 @@
                         <a class="ei109_171_1_389" href="{% url 'search1' %}">Tra cứu</a>
                     </div>
                 </div>
-                <div class=ei109_171_1_390>
-                    <div class=ei109_171_1_391>
-                        <div class="ei109_171_1_392"></div>
-                        <div class="ei109_171_1_393"></div>
-                    </div><span class="ei109_171_1_394">Hồ sơ</span></div>
+
                 <div class=ei109_171_1_395>
                     <div class="ei109_171_1_396"></div>
                     <a class="ei109_171_1_397" href="{% url 'logout' %}">Đăng xuẩt</a>
@@ -136,8 +133,10 @@
                 {{ myFilter.form.date}}
             </div>
             <div class="v109_275">
-                {{ myFilter.form.customer_name.label_tag}}
-                {{ customer.name}}
+                
+                <div class="v109_300">
+                    {{ myFilter.form.customer_name.label_tag}}
+                    {{ customer.name}}</div>
             </div>
             <div class="v109_276">{{myFilter.form.types}}</div>
             <div class="v109_283">{{myFilter.form.is_delete}}</div>
@@ -159,6 +158,35 @@
 
 </html> <br/><br/>
 <style>
+    option{
+        font-weight: bold;
+    }
+    input[type=date] {
+        width: 300px;
+        height: 45px;
+        border: none;
+        color: red;
+        font-weight: bold;
+    }
+    select{
+        height: 45px;
+        color: red;
+        width: 300px;
+        font-weight: bold;
+        border: none;
+    }
+    th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #127afa;
+        color: white;
+        text-align: center;
+    }
+
+    tr {
+        text-align: center;
+    }
     * {
         box-sizing: border-box;
     }
@@ -382,7 +410,7 @@
         height: 23.199996948242188px;
         position: absolute;
         left: 0px;
-        top: 237px;
+        top: 250px;
     }
     
     .ei109_171_1_375 {
@@ -426,7 +454,7 @@
         height: 23px;
         position: absolute;
         left: 15px;
-        top: 140px;
+        top: 125px;
         font-family: Quicksand;
         text-align: left;
         font-size: 18px;
@@ -438,7 +466,7 @@
         height: 23px;
         position: absolute;
         left: 0px;
-        top: 316.20001220703125px;
+        top: 330px;
     }
     
     .ei109_171_1_381 {
@@ -473,7 +501,7 @@
         height: 23px;
         position: absolute;
         left: 15px;
-        top: 125px;
+        top: 110px;
         font-family: Quicksand;
         text-align: left;
         font-size: 18px;
@@ -714,33 +742,38 @@
     }
     
     .v109_276 {
-        width: 150px;
-        height: 34px;
+        width: 300px;
+        height: 45px;
         background: rgba(255, 255, 255, 1);
         opacity: 1;
         position: absolute;
         top: 219px;
         left: 945px;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-        border-bottom-left-radius: 3px;
-        border-bottom-right-radius: 3px;
+        border-radius: 5px;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15000000596046448);
         overflow: hidden;
     }
-    
+    .v109_276 {
+        width: 300px;
+        height: 45px;
+        background: rgba(255, 255, 255, 1);
+        opacity: 1;
+        position: absolute;
+        top: 219px;
+        left: 945px;
+        border-radius: 5px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15000000596046448);
+        overflow: hidden;
+    }
     .v109_279 {
-        width: 150px;
-        height: 34px;
+        width: 300px;
+        height: 45px;
         background: rgba(255, 255, 255, 1);
         opacity: 1;
         position: absolute;
         top: 297px;
         left: 448px;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-        border-bottom-left-radius: 3px;
-        border-bottom-right-radius: 3px;
+        border-radius: 5px;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15000000596046448);
         overflow: hidden;
     }
@@ -767,7 +800,18 @@
         opacity: 1;
         text-align: left;
     }
-    
+    .v109_300 {
+        width: 400px;
+        color: rgba(0, 0, 0, 1);
+        position: absolute;
+        top: 6px;
+        left: 8px;
+        font-family: Quicksand;
+        font-weight: Bold;
+        font-size: 20px;
+        opacity: 1;
+        text-align: left;
+    }
     .v1_95 {
         width: 229px;
         color: rgba(0, 0, 0, 1);
@@ -1810,20 +1854,18 @@
     }
     
     .v109_275 {
-        width: 150px;
-        height: 34px;
+        width: 300px;
+        height: 45px;
         background: rgba(255, 255, 255, 1);
         opacity: 1;
         position: absolute;
         top: 221px;
         left: 447px;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-        border-bottom-left-radius: 3px;
-        border-bottom-right-radius: 3px;
+        border-radius: 5px;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15000000596046448);
         overflow: hidden;
     }
+
     
     #id_bankbookkk {
         width: 350px;
@@ -1908,17 +1950,14 @@
     }
     
     .v109_283 {
-        width: 150px;
-        height: 34px;
+        width: 300px;
+        height: 45px;
         background: rgba(255, 255, 255, 1);
         opacity: 1;
         position: absolute;
         top: 295px;
         left: 946px;
-        border-top-left-radius: 3px;
-        border-top-right-radius: 3px;
-        border-bottom-left-radius: 3px;
-        border-bottom-right-radius: 3px;
+        border-radius: 5px;
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15000000596046448);
         overflow: hidden;
     }

@@ -17,7 +17,7 @@ from account.decorators import unauthenticated_user
 
 # Create your views here.
 from .models import *
-from .forms import  OrderForm, CreateUserForm,CustomerForm,DepositForm,WithdrawForm
+from .forms import  *
 from .filters import *
 from .decorators import unauthenticated_user,allowed_users,admin_only
 
@@ -89,7 +89,7 @@ def userPage(request):
     
     total_bankbooks = bankbooks.count()
 
-    
+    print(bankbooks_all)
     myFilter = BookFilter(request.GET, queryset=bankbooks)
     bankbooks= myFilter.qs
     
@@ -115,109 +115,105 @@ def accountSettings(request):
 @allowed_users(allowed_roles=['customer'])
 def createBankBook(request):
     customer = request.user.customer
-
-    OrderFormSet = inlineformset_factory(Customer, BankBookkk, fields=('types','customer_name','identityid',
-                                                                     'customer_address','firstdeposit',
-                                                                     ),extra=1,can_delete=False
-                                                                    #  ,initial=[{'date_created':timezone.now(),}]
-                                                                     )
-    formset = OrderFormSet(queryset=BankBookkk.objects.none(),instance=customer)
+    print(customer)
+    formset = BankBookForm(initial={'customer_name':customer})
     if request.method == 'POST':
-        formset = OrderFormSet(request.POST,instance=customer)
+        formset = BankBookForm(request.POST,initial={'customer_name':customer})
         if formset.is_valid():
-            money = formset.cleaned_data[0]['firstdeposit']
+            money = formset.cleaned_data.get('firstdeposit')
             if money >= 100000:
-                
-                bankbookkks = formset.save()
-                bankbookkk = bankbookkks[0]
+                bankbookkk = formset.save(commit=False)
+                bankbookkk.customer = customer
+                bankbookkk.save()
+
                 Transaction.objects.create(bankbookkk=bankbookkk,
                                                         depositamount = money,
-                                                        customer_name=formset.cleaned_data[0]['customer_name'])
+                                                        customer_name=formset.cleaned_data.get('customer_name'))
                 return redirect('/')
             else: 
                 messages.info(request, 'Số tiền gửi tối thiếu là 100,000')
                 
-    context = {'formset':formset} 
+    context = {'form':formset} 
     return render(request, 'accounts/bankbook_form.html',context)
 
 
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
-def products(request):
-    products = Products.objects.all()
-    return render(request, 'accounts/products.html',{'products':products})
+# @login_required(login_url='login')
+# @allowed_users(allowed_roles=['admin'])
+# def products(request):
+#     products = Products.objects.all()
+#     return render(request, 'accounts/products.html',{'products':products})
 
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
-def customer(request,pk_test):
-    customer = Customer.objects.get(id=pk_test)
+# @login_required(login_url='login')
+# @allowed_users(allowed_roles=['admin'])
+# def customer(request,pk_test):
+#     customer = Customer.objects.get(id=pk_test)
 
-    orders = customer.orders_set.all()
-    orders_count= orders.count()
+#     orders = customer.orders_set.all()
+#     orders_count= orders.count()
     
-    myFilter = OrderFilter(request.GET, queryset=orders)
-    orders = myFilter.qs
+#     myFilter = OrderFilter(request.GET, queryset=orders)
+#     orders = myFilter.qs
 
     
-    amounts = orders.values('status').annotate(entries=Sum('amount'))
-    context = {'customer':customer,'orders':orders,'orders_count':orders_count,
-    'myFilter':myFilter,'amounts':amounts}
+#     amounts = orders.values('status').annotate(entries=Sum('amount'))
+#     context = {'customer':customer,'orders':orders,'orders_count':orders_count,
+#     'myFilter':myFilter,'amounts':amounts}
 
-    return render(request, 'accounts/customer.html',context)
+#     return render(request, 'accounts/customer.html',context)
 
 
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
-def updateOrder(request,pk):
-    order = Orders.objects.get(id=pk)
-    form = OrderForm(instance=order)
+# @login_required(login_url='login')
+# @allowed_users(allowed_roles=['admin'])
+# def updateOrder(request,pk):
+#     order = Orders.objects.get(id=pk)
+#     form = OrderForm(instance=order)
 
-    if request.method == 'POST':
-        print('Printing POST: ',request.POST)
-        form = OrderForm(request.POST, instance=order)
-        if form.is_valid():
-            form.save()
-            return redirect('/')
+#     if request.method == 'POST':
+#         print('Printing POST: ',request.POST)
+#         form = OrderForm(request.POST, instance=order)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('/')
 
-    context = {'form':form}
-    return render(request,'accounts/order_form.html',context)
+#     context = {'form':form}
+#     return render(request,'accounts/order_form.html',context)
 
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
-def deleteOrder(request,pk):
-    order = Orders.objects.get(id=pk)
-    if request.method == 'POST':
-        order.delete()
-        return redirect('/')
-    context = {'item':order}
-    return render(request,'accounts/delete.html',context)
+# @login_required(login_url='login')
+# @allowed_users(allowed_roles=['admin'])
+# def deleteOrder(request,pk):
+#     order = Orders.objects.get(id=pk)
+#     if request.method == 'POST':
+#         order.delete()
+#         return redirect('/')
+#     context = {'item':order}
+#     return render(request,'accounts/delete.html',context)
 
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
-def createOrder(request,pk):
-    OrderFormSet = inlineformset_factory(Customer, BankBookkk, fields=('type','customer_name','identityid',
-                                                                    'customer_address','firstdeposit',
-                                                                    ),extra=1)
-    customer = Customer.objects.get(id=pk)
-    formset = OrderFormSet(queryset=BankBookkk.objects.none(),instance=customer)
-    if request.method == 'POST':
-        formset = OrderFormSet(request.POST,instance=customer)
-        if formset.is_valid():
-            formset.save()
-            return redirect('/')
-    context = {'formset': formset}
-    return render(request,'accounts/order_form.html',context)
+# @login_required(login_url='login')
+# @allowed_users(allowed_roles=['admin'])
+# def createOrder(request,pk):
+#     OrderFormSet = inlineformset_factory(Customer, BankBookkk, fields=('type','customer_name','identityid',
+#                                                                     'customer_address','firstdeposit',
+#                                                                     ),extra=1)
+#     customer = Customer.objects.get(id=pk)
+#     formset = OrderFormSet(queryset=BankBookkk.objects.none(),instance=customer)
+#     if request.method == 'POST':
+#         formset = OrderFormSet(request.POST,instance=customer)
+#         if formset.is_valid():
+#             formset.save()
+#             return redirect('/')
+#     context = {'formset': formset}
+#     return render(request,'accounts/order_form.html',context)
 
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['customer'])
 def depositMoney(request):
     customer = request.user.customer
-    form = DepositForm(instance=customer)
+    form = DepositForm(instance=customer,initial={'customer_name':customer})
     myFilter = None
     bankbooks =  request.user.customer.bankbookkk_set.all().filter(is_delete=False)
     if request.method == 'POST':
-        form = DepositForm(request.POST,instance=customer)
+        form = DepositForm(request.POST,instance=customer,initial={'customer_name':customer})
         if form.is_valid():
             amount = form.cleaned_data.get('depositamount')
             id = form.cleaned_data.get('bankbookkk')
@@ -259,9 +255,9 @@ def depositMoney(request):
 def withdrawMoney(request):
 
     customer = request.user.customer
-    form = WithdrawForm(instance=customer)
+    form = WithdrawForm(instance=customer,initial={'customer_name':customer})
     if request.method == 'POST':
-        form = WithdrawForm(request.POST,instance=customer)
+        form = WithdrawForm(request.POST,instance=customer,initial={'customer_name':customer})
         if form.is_valid():
             amount = form.cleaned_data.get('depositamount')
             id = form.cleaned_data.get('bankbookkk')
