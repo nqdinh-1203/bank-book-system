@@ -7,7 +7,7 @@
 - 19120478: Nguyễn Quang Định 
 - 19120494: Huỳnh Quốc Duy
 - 19120562: Lê Thành Lộc
-- 1912062: Hồ Hữu Ngọc
+- 19120602: Hồ Hữu Ngọc
 
 # Giới thiệu project
 **Tên đề tài: Quản lý sổ tiết kiệm**
