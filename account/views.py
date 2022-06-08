@@ -121,7 +121,8 @@ def createBankBook(request):
         formset = BankBookForm(request.POST,initial={'customer_name':customer})
         if formset.is_valid():
             money = formset.cleaned_data.get('firstdeposit')
-            if money >= 100000:
+            types = formset.cleaned_data.get('types')
+            if money >= types.minimum_deposit_amount:
                 bankbookkk = formset.save(commit=False)
                 bankbookkk.customer = customer
                 bankbookkk.save()
@@ -131,7 +132,7 @@ def createBankBook(request):
                                                         customer_name=formset.cleaned_data.get('customer_name'))
                 return redirect('/')
             else: 
-                messages.info(request, 'Số tiền gửi tối thiếu là 100,000')
+                messages.info(request, f'Số tiền gửi tối thiếu là {types.minimum_deposit_amount}')
                 
     context = {'form':formset} 
     return render(request, 'accounts/bankbook_form.html',context)
@@ -250,62 +251,62 @@ def depositMoney(request):
     context = {'form':form, 'bankbooks':bankbooks, 'myFilter':myFilter}
     return render(request, 'accounts/deposit_form.html',context)
 
-@login_required(login_url='login')
-@allowed_users(allowed_roles=['customer'])
-def withdrawMoney(request):
+# @login_required(login_url='login')
+# @allowed_users(allowed_roles=['customer'])
+# def withdrawMoney(request):
 
-    customer = request.user.customer
-    form = WithdrawForm(instance=customer,initial={'customer_name':customer})
-    if request.method == 'POST':
-        form = WithdrawForm(request.POST,instance=customer,initial={'customer_name':customer})
-        if form.is_valid():
-            amount = form.cleaned_data.get('depositamount')
-            id = form.cleaned_data.get('bankbookkk')
+#     customer = request.user.customer
+#     form = WithdrawForm(instance=customer,initial={'customer_name':customer})
+#     if request.method == 'POST':
+#         form = WithdrawForm(request.POST,instance=customer,initial={'customer_name':customer})
+#         if form.is_valid():
+#             amount = form.cleaned_data.get('depositamount')
+#             id = form.cleaned_data.get('bankbookkk')
 
-            from django.db.models import Q
-            criterion1 = Q(customer=customer)
-            criterion2 = Q(bookid=str(id))
+#             from django.db.models import Q
+#             criterion1 = Q(customer=customer)
+#             criterion2 = Q(bookid=str(id))
 
-            bankbookkk = BankBookkk.objects.filter(criterion1 & criterion2).first()
-            bankbookkk.updateBalance()
-            print(bankbookkk)
-            created_days = (timezone.now() - bankbookkk.date_created).days
-            created_months = (timezone.now() - bankbookkk.date_created).months
-            print(created_days,created_months)
-            if created_days < 15:
-                messages.success(request, f'Chỉ được rút tiền khi mở sổ ít nhất 15 ngày')
-                return
+#             bankbookkk = BankBookkk.objects.filter(criterion1 & criterion2).first()
+#             bankbookkk.updateBalance()
+#             print(bankbookkk)
+#             created_days = (timezone.now() - bankbookkk.date_created).days
+#             created_months = (timezone.now() - bankbookkk.date_created).months
+#             print(created_days,created_months)
+#             if created_days < 15:
+#                 messages.success(request, f'Chỉ được rút tiền khi mở sổ ít nhất 15 ngày')
+#                 return
 
-            if bankbookkk.types.period != 0:
-                if created_months < bankbookkk.types.period:
-                    messages.success(request, f'Loại tiết kiệm có kỳ hạn chỉ đưọc rút khi quá kỳ hạn')
-                    return
+#             if bankbookkk.types.period != 0:
+#                 if created_months < bankbookkk.types.period:
+#                     messages.success(request, f'Loại tiết kiệm có kỳ hạn chỉ đưọc rút khi quá kỳ hạn')
+#                     return
 
-            min_withdrawal_amount = bankbookkk.types.minimum_withdrawal_amount
-            max_withdrawal_amount = bankbookkk.types.maximum_withdrawal_amount
+#             min_withdrawal_amount = bankbookkk.types.minimum_withdrawal_amount
+#             max_withdrawal_amount = bankbookkk.types.maximum_withdrawal_amount
 
-            if amount < min_withdrawal_amount:
-                messages.success(request, f'Bạn cần rút tối thiểu {min_withdrawal_amount}')
-            elif amount > max_withdrawal_amount:
-                messages.success(request, f'Bạn chỉ được rút tối đa {max_withdrawal_amount}')
-            else:
-                bankbookkk.balance = Decimal(bankbookkk.balance) - amount
-                bankbookkk.save(
-                    update_fields=['balance']
-                )
-                return redirect('/')
+#             if amount < min_withdrawal_amount:
+#                 messages.success(request, f'Bạn cần rút tối thiểu {min_withdrawal_amount}')
+#             elif amount > max_withdrawal_amount:
+#                 messages.success(request, f'Bạn chỉ được rút tối đa {max_withdrawal_amount}')
+#             else:
+#                 bankbookkk.balance = Decimal(bankbookkk.balance) - amount
+#                 bankbookkk.save(
+#                     update_fields=['balance']
+#                 )
+#                 return redirect('/')
 
-    context = {'form':form}
-    return render(request, 'accounts/withdraw_form.html',context)
+#     context = {'form':form}
+#     return render(request, 'accounts/withdraw_form.html',context)
 
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['customer'])
 def checkout(request):
     customer = request.user.customer
-    form = WithdrawForm(instance=customer)
+    form = WithdrawForm(instance=customer,initial={'customer_name':customer})
     bankbooks =  request.user.customer.bankbookkk_set.all().filter(is_delete=False)
     if request.method == 'POST':
-        form = WithdrawForm(request.POST,instance=customer)
+        form = WithdrawForm(request.POST,instance=customer,initial={'customer_name':customer})
         if form.is_valid():
             amount = form.cleaned_data.get('withdrawalamount')
             id = form.cleaned_data.get('bankbookkk')

@@ -17,8 +17,10 @@ class Customer(models.Model):
     name = models.CharField(max_length=200, null=True,verbose_name='Tên khách hàng')
     phone = models.CharField(max_length=200, null=True,verbose_name='Số điện thoại khách hàng')
     email = models.CharField(max_length=200, null=True,verbose_name='Email khách hàng')
-    profile_pic = models.ImageField(default="logo2.png",null=True,blank=True)
+    profile_pic = models.ImageField(default="logo2.png",null=True,blank=True,upload_to='ProfileImages/')
     date_created = models.DateTimeField(auto_now_add=True, null=True)
+    identityid = models.CharField(max_length=200, null=True,blank=True,verbose_name='CMND/CCCD')
+    address = models.CharField(max_length=200, null=True,blank=True,verbose_name='Địa chỉ')
 
     def __str__(self):
         return self.name
@@ -45,8 +47,6 @@ class Products(models.Model):
     def __str__(self):
         return self.name
         
-def diff_month(d1, d2):
-        return (d1.year - d2.year) * 12 + d1.month - d2.month
 
 class BankBookkkType(models.Model):
     name = models.CharField(max_length=128,verbose_name='Tên loại tiết kiệm')

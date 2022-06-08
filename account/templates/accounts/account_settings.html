@@ -76,7 +76,11 @@
             </div>
 
         <span class="v1_94">Thông tin tài khoản</span>
-        
+        <div class="v109_291">
+            <div class="card card-body">
+                <img class="profile-pic" src="{{request.user.customer.profile_pic.url}}" >
+            </div>
+        </div>
 
         <form action="" method="POST">
             {% csrf_token %}
@@ -93,6 +97,18 @@
 				{{form.email.label_tag}}
 				{{form.email}}
 			</div>
+            <div class="v109_290">
+                {{form.address.label_tag}}
+				{{form.address}}
+			</div>
+            <div class="v109_292">
+				{{form.identityid.label_tag}}
+				{{form.identityid}}
+			</div>
+            <div class="v109_293">
+				{{form.profile_pic.label_tag}}
+				{{form.profile_pic}}
+			</div>
 
             <hr> {% for message in messages %}
             <span id="mess">{{message}}</span> {% endfor %}
@@ -105,6 +121,14 @@
 
 </html> <br /><br />
 <style>
+    .profile-pic{
+		max-width: 250px;
+		max-height:500px;
+		margin: 0 auto;
+		border-radius: 50%;
+        top: 221px;
+        left: 400px;
+	}
     * {
         box-sizing: border-box;
     }
@@ -149,12 +173,7 @@
     .table-wrapper-scroll-y {
         display: block;
     }
-	.profile-pic{
-		max-width: 200px;
-		max-height:200px;
-		margin: 0 auto;
-		border-radius: 50%;
-	}
+
     .e109_230 {
         width: 242px;
         height: 1024px;
@@ -448,7 +467,7 @@
         height: 23px;
         position: absolute;
         left: 15px;
-        top: 90px;
+        top: 110px;
         font-family: Quicksand;
         text-align: left;
         font-size: 18px;
@@ -708,14 +727,63 @@
         opacity: 1;
         position: absolute;
         top: 297px;
-        left: 448px;
+        left: 555px;
         border-top-left-radius: 3px;
         border-top-right-radius: 3px;
         border-bottom-left-radius: 3px;
         border-bottom-right-radius: 3px;
         overflow: hidden;
     }
-
+    .v109_292 {
+        width: 349px;
+        height: 34px;
+        opacity: 1;
+        position: absolute;
+        top: 380px;
+        left: 755px;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+        overflow: hidden;
+    }
+    .v109_293 {
+        width: 349px;
+        height: 200px;
+        opacity: 1;
+        position: absolute;
+        top: 430px;
+        left: 260px;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+        overflow: hidden;
+    }
+    .v109_290 {
+        width: 349px;
+        height: 200px;
+        opacity: 1;
+        position: absolute;
+        top: 295px;
+        left: 940px;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+        overflow: hidden;
+    }
+    .v109_291 {
+        width: 290px;
+        height: 600px;
+        
+        opacity: 1;
+        position: absolute;
+        top: 200px;
+        left: 250px;
+        
+        overflow: hidden;
+    }
     #e {
         width: 349px;
         height: 34px;
@@ -1725,8 +1793,8 @@
         background: rgba(49, 130, 206, 1);
         opacity: 1;
         position: absolute;
-        top: 400px;
-        left: 818px;
+        top: 450px;
+        left: 850px;
         border-top-left-radius: 3px;
         border-top-right-radius: 3px;
         border-bottom-left-radius: 3px;
@@ -1772,7 +1840,7 @@
         opacity: 1;
         position: absolute;
         top: 221px;
-        left: 447px;
+        left: 555px;
         
         overflow: hidden;
     }

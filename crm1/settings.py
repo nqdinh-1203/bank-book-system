@@ -162,15 +162,16 @@ EMAIL_HOST_PASSWORD = 'huynhquocduy'
 
 #S3 BUCKETS CONFIG
 
-# AWS_ACCESS_KEY_ID = 'AKIATGOKHEKUD3HFKZEC'
-# AWS_SECRET_ACCESS_KEY = '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'
-# AWS_STORAGE_BUCKET_NAME = 'theblues'
+AWS_ACCESS_KEY_ID = 'AKIATGOKHEKUD3HFKZEC'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'theblues'
+AWS_S3_ADDRESSING_STYLE = "virtual"
 
-# AWS_S3_FILE_OVERWRITE = False
-# AWS_DEFAULT_ACL = None
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 '''
 [
