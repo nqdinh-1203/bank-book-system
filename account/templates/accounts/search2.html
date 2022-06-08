@@ -72,29 +72,32 @@
                 <div class="v1_103">
                     <div class="col-md">
                         <div class="table-wrapper-scroll-y my-custom-scrollbar">
-                            <table class="table table-bordered table-striped mb-0">
-                                <tr>
-                                    <th>Mã sổ</th>
-                                    <th>Loại tiết kiệm</th>
-                                    <th>Tên</th>
-                                    <th>Ngày tạo</th>
-                                    <th>Địa chỉ</th>
-                                    <th>Số dư</th>
+                            <table class="table table-bordered table-striped table-sortable mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Mã sổ</th>
+                                        <th>Loại tiết kiệm</th>
+                                        <th>Tên</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Địa chỉ</th>
+                                        <th>Số dư</th>
 
-                                </tr>
-
-                                {% for bankbook in bankbookres%}
-                                <tr>
-                                    <td>{{bankbook.bookid}}</td>
-                                    <td>{{bankbook.types}}</td>
-                                    <td>{{bankbook.customer_name}}</td>
-                                    <td>{{bankbook.date_created}}</td>
-                                    <td>{{bankbook.customer_address}}</td>
-                                    <td>{{bankbook.balance}}</td>
-                                </tr>
-                                {% endfor %}
-
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for bankbook in bankbookres%}
+                                    <tr>
+                                        <td>{{bankbook.bookid}}</td>
+                                        <td>{{bankbook.types}}</td>
+                                        <td>{{bankbook.customer_name}}</td>
+                                        <td>{{bankbook.date_created}}</td>
+                                        <td>{{bankbook.customer_address}}</td>
+                                        <td>{{bankbook.balance}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
                             </table>
+                        
                         </div>
                         <script>
                             $(document).ready(function() {
@@ -141,10 +144,80 @@
 </body>
 <script>
     document.getElementById('e').value = new Date().toISOString().substring(0, 10);
+    function sortTableByColumn(table, column, asc = true) {
+        const dirModifier = asc ? 1 : -1;
+        const tBody = table.tBodies[0];
+        const rows = Array.from(tBody.querySelectorAll("tr"));
+
+        // Sort each row
+        const sortedRows = rows.sort((a, b) => {
+            const aColText = a.querySelector(`td:nth-child(${column + 1})`).textContent.trim();
+            const bColText = b.querySelector(`td:nth-child(${column + 1})`).textContent.trim();
+
+            return aColText > bColText ? (1 * dirModifier) : (-1 * dirModifier);
+        });
+
+        // Remove all existing TRs from the table
+        while (tBody.firstChild) {
+            tBody.removeChild(tBody.firstChild);
+        }
+
+        // Re-add the newly sorted rows
+        tBody.append(...sortedRows);
+
+        // Remember how the column is currently sorted
+        table.querySelectorAll("th").forEach(th => th.classList.remove("th-sort-asc", "th-sort-desc"));
+        table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("th-sort-asc", asc);
+        table.querySelector(`th:nth-child(${column + 1})`).classList.toggle("th-sort-desc", !asc);
+    }
+
+    document.querySelectorAll(".table-sortable th").forEach(headerCell => {
+        headerCell.addEventListener("click", () => {
+            const tableElement = headerCell.parentElement.parentElement.parentElement;
+            const headerIndex = Array.prototype.indexOf.call(headerCell.parentElement.children, headerCell);
+            const currentIsAscending = headerCell.classList.contains("th-sort-asc");
+
+            sortTableByColumn(tableElement, headerIndex, !currentIsAscending);
+        });
+    });
 </script>
 
 </html> <br/><br/>
 <style>
+    .table-sortable th {
+        cursor: pointer;
+    }
+
+    .table-sortable .th-sort-asc::after {
+        content: "\25b4";
+    }
+
+    .table-sortable .th-sort-desc::after {
+        content: "\25be";
+    }
+
+    .table-sortable .th-sort-asc::after,
+    .table-sortable .th-sort-desc::after {
+        margin-left: 5px;
+    }
+
+    .table-sortable .th-sort-asc,
+    .table-sortable .th-sort-desc {
+        background: #127afa;
+    }
+
+    th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #127afa;
+        color: white;
+        text-align: center;
+    }
+
+    tr {
+        text-align: center;
+    }
     option{
         font-weight: bold;
     }
@@ -162,18 +235,7 @@
         font-weight: bold;
         border: none;
     }
-    th {
-        padding-top: 12px;
-        padding-bottom: 12px;
-        text-align: left;
-        background-color: #127afa;
-        color: white;
-        text-align: center;
-    }
 
-    tr {
-        text-align: center;
-    }
     * {
         box-sizing: border-box;
     }
@@ -896,7 +958,7 @@
     }
     
     .v1_102 {
-        width: 1300px;
+        width: 1000px;
         height: 349px;
         background: url("../images/v1_102.png");
         background-repeat: no-repeat;
@@ -910,7 +972,7 @@
     }
     
     .v1_103 {
-        width: 1190px;
+        width: 1000px;
         height: 349px;
         background: rgba(255, 255, 255, 1);
         opacity: 1;

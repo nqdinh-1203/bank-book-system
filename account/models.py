@@ -8,6 +8,8 @@ from django.core.validators import (
 from decimal import Decimal
 from django.utils import timezone
 from .constant import TRANSACTION_TYPE_CHOICES
+import boto3
+
 
 
 
@@ -17,7 +19,10 @@ class Customer(models.Model):
     name = models.CharField(max_length=200, null=True,verbose_name='Tên khách hàng')
     phone = models.CharField(max_length=200, null=True,verbose_name='Số điện thoại khách hàng')
     email = models.CharField(max_length=200, null=True,verbose_name='Email khách hàng')
-    profile_pic = models.ImageField(default="logo2.png",null=True,blank=True,upload_to='ProfileImages/')
+    profile_pic = models.ImageField(null=True,blank=True,
+    default="https://theblues.s3.us-west-2.amazonaws.com/images/benzema_laya.jpeg",
+    upload_to='images',
+    )
     date_created = models.DateTimeField(auto_now_add=True, null=True)
     identityid = models.CharField(max_length=200, null=True,blank=True,verbose_name='CMND/CCCD')
     address = models.CharField(max_length=200, null=True,blank=True,verbose_name='Địa chỉ')

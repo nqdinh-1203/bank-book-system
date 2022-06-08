@@ -78,13 +78,13 @@
         <span class="v1_94">Thông tin tài khoản</span>
         <div class="v109_291">
             <div class="card card-body">
-                <img class="profile-pic" src="{{request.user.customer.profile_pic.url}}" >
+                <img class="profile-pic" src="{{request.user.customer.profile_pic}}" >
             </div>
         </div>
 
-        <form action="" method="POST">
+        <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-
+            
             <div class="v109_275">
 				{{form.name.label_tag}}
 				{{form.name}}
@@ -106,7 +106,6 @@
 				{{form.identityid}}
 			</div>
             <div class="v109_293">
-				{{form.profile_pic.label_tag}}
 				{{form.profile_pic}}
 			</div>
 

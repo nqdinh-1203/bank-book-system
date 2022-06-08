@@ -102,9 +102,11 @@ def userPage(request):
 def accountSettings(request):
     customer = request.user.customer
     form = CustomerForm(instance=customer)
+    print(customer)
 
     if request.method == 'POST':
         form=CustomerForm(request.POST,request.FILES,instance=customer)
+        print(2)
         if form.is_valid():
             form.save()
 
@@ -213,6 +215,9 @@ def depositMoney(request):
     form = DepositForm(instance=customer,initial={'customer_name':customer})
     myFilter = None
     bankbooks =  request.user.customer.bankbookkk_set.all().filter(is_delete=False)
+    # for bankbook in bankbooks:
+    #     bankbook.updateBalance()
+    #     bankbook.save()
     if request.method == 'POST':
         form = DepositForm(request.POST,instance=customer,initial={'customer_name':customer})
         if form.is_valid():
@@ -234,7 +239,7 @@ def depositMoney(request):
                     messages.success(request, f'Bạn cần gửi tối thiểu {min_deposit_amount} ')
                 else:
                     bankbookkk.balance = Decimal(bankbookkk.balance) + amount
-                    deposit = Transaction.objects.create(bankbookkk=bankbookkk,
+                    Transaction.objects.create(bankbookkk=bankbookkk,
                                                         depositamount = amount,
                                                         customer_name=form.cleaned_data.get('customer_name'))
                     
@@ -305,6 +310,9 @@ def checkout(request):
     customer = request.user.customer
     form = WithdrawForm(instance=customer,initial={'customer_name':customer})
     bankbooks =  request.user.customer.bankbookkk_set.all().filter(is_delete=False)
+    # for bankbook in bankbooks:
+    #     bankbook.updateBalance()
+    #     bankbook.save()
     if request.method == 'POST':
         form = WithdrawForm(request.POST,instance=customer,initial={'customer_name':customer})
         if form.is_valid():
@@ -336,7 +344,7 @@ def checkout(request):
                 min_money_checkout = bankbookkk.types.minimum_withdrawal_amount
                 max_money_checkout = bankbookkk.types.maximum_withdrawal_amount
 
-                # print(bankbookkk.types.name, min_money_checkout, max_money_checkout, bankbookkk.balance)
+                print(bankbookkk.types.name, min_money_checkout, max_money_checkout, bankbookkk.balance)
                 flag = 0
                 if bankbookkk.types.name != 'Không kỳ hạn':
                     naive = datetime.datetime(2023, 5, 26)
@@ -345,12 +353,16 @@ def checkout(request):
                     # print(naive.date(), date_created.date(), time_valid)
                     if time_valid.days < int(bankbookkk.types.period)*30:
                         flag = 1
-                        messages.success(request, f'Bạn chưa tới kì hạn {bankbookkk.types.period} tháng')
+                        messages.info(request, f'Bạn chưa tới kì hạn {bankbookkk.types.period} tháng')
                 if flag == 0:
                     if amount < min_money_checkout:
-                        messages.success(request, f'Bạn cần rút tối thiểu {min_money_checkout} ')
+                        print(f'Bạn cần rút tối thiểu {min_money_checkout} ')
+                        messages.info(request, f'Bạn cần rút tối thiểu {min_money_checkout} ')
+                        return redirect('checkout')
                     elif amount > max_money_checkout:
-                        messages.success(request, f'Bạn cần rút tối đa {max_money_checkout} ')
+                        print(f'Bạn cần rút tối đa {max_money_checkout} ')
+                        messages.info(request, f'Bạn cần rút tối đa {max_money_checkout} ')
+                        return redirect('checkout')
                     else:
                         bankbookkk.balance = Decimal(bankbookkk.balance) - amount
                         bankbookkk.save(
@@ -386,7 +398,7 @@ def search1(request):
 
     bankbooks =  request.user.customer.bankbookkk_set.all()
     myFilter = Search(request.GET, queryset=bankbooks)
-    bankbookres= myFilter.qs
+    bankbookres= myFilter.qs.order_by('bookid')
     customer =  request.user.customer
     context = {'bankbooks':bankbooks,'bankbookres':bankbookres,'myFilter':myFilter,'customer':customer}
 
@@ -399,7 +411,7 @@ def search2(request):
 
     bankbooks =  BankBookkk.objects.all()
     myFilter = Search(request.GET, queryset=bankbooks)
-    bankbookres= myFilter.qs
+    bankbookres= myFilter.qs.order_by('bookid')
     
     context = {'bankbooks':bankbooks,'bankbookres':bankbookres,'myFilter':myFilter}
     return render(request,'accounts/search2.html',context)

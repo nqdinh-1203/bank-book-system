@@ -165,10 +165,14 @@ EMAIL_HOST_PASSWORD = 'huynhquocduy'
 AWS_ACCESS_KEY_ID = 'AKIATGOKHEKUD3HFKZEC'
 AWS_SECRET_ACCESS_KEY = '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'
 AWS_STORAGE_BUCKET_NAME = 'theblues'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_DEFAULT_ACL = 'public-read'
 AWS_S3_ADDRESSING_STYLE = "virtual"
+AWS_QUERYSTRING_AUTH = False
 
 AWS_S3_FILE_OVERWRITE = False
-AWS_DEFAULT_ACL = None
+AWS_LOCATION = 'static'
+#AWS_DEFAULT_ACL = None
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -190,4 +194,3 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
     }
 ]
 '''
-MINIMUM_DEPOSIT_AMOUNT = 100000
