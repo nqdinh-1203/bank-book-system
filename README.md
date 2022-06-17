@@ -146,7 +146,7 @@ Link Heroku: https://theblues-crm1.herokuapp.com/
 - git commit -am "make it better"
 - git push heroku master
 # Link demo
-https://studenthcmusedu-my.sharepoint.com/personal/19120478_student_hcmus_edu_vn/_layouts/15/onedrive.aspx?id=%2Fpersonal%2F19120478%5Fstudent%5Fhcmus%5Fedu%5Fvn%2FDocuments%2Fnmcnpm%2Fnmcnpm%2Emp4&parent=%2Fpersonal%2F19120478%5Fstudent%5Fhcmus%5Fedu%5Fvn%2FDocuments%2Fnmcnpm&ga=1
+[https://studenthcmusedu-my.sharepoint.com/personal/19120478_student_hcmus_edu_vn/_layouts/15/onedrive.aspx?id=%2Fpersonal%2F19120478%5Fstudent%5Fhcmus%5Fedu%5Fvn%2FDocuments%2Fnmcnpm%2Fnmcnpm%2Emp4&parent=%2Fpersonal%2F19120478%5Fstudent%5Fhcmus%5Fedu%5Fvn%2FDocuments%2Fnmcnpm&ga=1](https://studenthcmusedu-my.sharepoint.com/:v:/g/personal/19120478_student_hcmus_edu_vn/EW5HHe3y2DxFrW-Q5nPEDSMBD_bYVT9ffsiv38yiKh6z0w?e=XyNwwF)
 # Current status:
 - Hoàn thành tất cả các tính năng và giao diện của đồ án
 # Future works
