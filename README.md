@@ -145,9 +145,8 @@ Link Heroku: https://theblues-crm1.herokuapp.com/
 - git add .
 - git commit -am "make it better"
 - git push heroku master
-# Link demo'
+# Link demo
 https://studenthcmusedu-my.sharepoint.com/personal/19120478_student_hcmus_edu_vn/_layouts/15/onedrive.aspx?id=%2Fpersonal%2F19120478%5Fstudent%5Fhcmus%5Fedu%5Fvn%2FDocuments%2Fnmcnpm%2Fnmcnpm%2Emp4&parent=%2Fpersonal%2F19120478%5Fstudent%5Fhcmus%5Fedu%5Fvn%2FDocuments%2Fnmcnpm&ga=1
 # Current status:
-- Đã hoàn thành các tính năng cơ bản của sổ tiết kiệm
-- Phần frontend vẫn còn gặp nhiều vấn đề nên vẫn đang được chỉnh sửa và sẽ được tiếp tục cập nhật
+- Hoàn thành tất cả các tính năng và giao diện của đồ án
 # Future works
